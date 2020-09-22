@@ -23,6 +23,7 @@ pubSubSubscriber.on("unsubscribe", function (data) {
   console.log(data.topic + " unsubscribed");
   // console.log(data.hub + " hub");
   // console.log(data.callback + " callback");
+  transmitDeveloperNotification("Unsubscribed to " + data.topic);
 });
 
 pubSubSubscriber.on("feed", function (data) {
@@ -33,6 +34,7 @@ pubSubSubscriber.on("feed", function (data) {
   // console.log(data.callback + " callback");
   console.log(data.feed);
   transmitDiscordNotification(data.feed);
+  transmitDeveloperNotification("Something's happening! " + data.feed);
 
   // console.log(data.feaders + " headers");
 });
