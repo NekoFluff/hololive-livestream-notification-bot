@@ -2,7 +2,7 @@ require("dotenv").config();
 
 var pubSubHubbub = require("pubsubhubbub");
 var options = {
-  callbackUrl: `${process.env.LOCATION}:${process.env.PORT}/pubsubhubbub`,
+  callbackUrl: process.env.PUBSUBHUBBUB_CALLBACK,
 };
 var pubSubSubscriber = pubSubHubbub.createServer(options);
 console.log("pubSubSubscriber options", options);
