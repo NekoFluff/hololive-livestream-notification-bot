@@ -1,6 +1,8 @@
+require("dotenv").config();
+
 var pubSubHubbub = require("pubsubhubbub");
 var options = {
-  callbackUrl: "http://crazy-raspberry.myddns.me:88/pubsubhubbub",
+  callbackUrl: `${process.env.LOCATION}:${process.env.PORT}/pubsubhubbub`,
 };
 var pubSubSubscriber = pubSubHubbub.createServer(options);
 
