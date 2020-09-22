@@ -2,8 +2,7 @@ require("dotenv").config();
 const app = require("./server");
 const discordBot = require("./discordBot");
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log(`Listening on port ${port}`);
 });
 
