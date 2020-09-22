@@ -4,9 +4,10 @@ const { Client, Collection } = require("discord.js");
 const bot = new Client();
 bot.commands = new Collection();
 const botCommands = require("./commands");
+const prefix = process.env.PREFIX || "!"
 
 Object.keys(botCommands).map((key) => {
-  bot.commands.set(botCommands[key].name, botCommands[key]);
+  bot.commands.set(botCommands[prefix+key].name, botCommands[key]);
 });
 
 const TOKEN = process.env.TOKEN;

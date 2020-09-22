@@ -29,5 +29,6 @@ function subscribe() {
 subscribe();
 
 let reschedulerId = setInterval(() => {
+  console.log('Re-subscribing...')
   subscribe();
-}, 400000 * 1000);
+}, 43100 * 1000);
