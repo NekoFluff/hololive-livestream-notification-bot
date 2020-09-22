@@ -5,7 +5,8 @@ var options = {
   callbackUrl: `${process.env.LOCATION}:${process.env.PORT}/pubsubhubbub`,
 };
 var pubSubSubscriber = pubSubHubbub.createServer(options);
-
+console.log("pubSubSubscriber options", options);
+console.log("pubSubSubscriber", pubSubSubscriber);
 const transmitDiscordNotification = require("./transmitDiscordNotification");
 
 pubSubSubscriber.on("subscribe", function (data) {
@@ -13,6 +14,13 @@ pubSubSubscriber.on("subscribe", function (data) {
   console.log(data.topic + " subscribed");
   // console.log(data.hub + " hub");
   // console.log(data.callback + " callback");
+  var fs = require("fs");
+
+  const discordBot = require("./discordBot");
+
+  fs.readFile(__dirname + "/foo.xml", function (err, data) {
+    transmitDiscordNotification(data);
+  });
 });
 
 pubSubSubscriber.on("unsubscribe", function (data) {
