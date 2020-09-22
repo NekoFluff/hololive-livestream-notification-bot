@@ -1,6 +1,6 @@
 require("dotenv").config();
 const app = require("./server");
-// const discordBot = require("./discordBot");
+const discordBot = require("./discordBot");
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
@@ -26,8 +26,8 @@ function subscribe() {
     });
   }
 }
-// subscribe();
+subscribe();
 
-// let reschedulerId = setInterval(() => {
-//   subscribe();
-// }, 400000 * 1000);
+let reschedulerId = setInterval(() => {
+  subscribe();
+}, 400000 * 1000);
