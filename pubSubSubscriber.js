@@ -8,19 +8,14 @@ var pubSubSubscriber = pubSubHubbub.createServer(options);
 console.log("pubSubSubscriber options", options);
 console.log("pubSubSubscriber", pubSubSubscriber);
 const transmitDiscordNotification = require("./transmitDiscordNotification");
+const transmitDeveloperNotification = require("./transmitDeveloperNotification");
 
 pubSubSubscriber.on("subscribe", function (data) {
   console.log("-------------------SUBSCRIBE-------------------");
   console.log(data.topic + " subscribed");
   // console.log(data.hub + " hub");
   // console.log(data.callback + " callback");
-  var fs = require("fs");
-
-  const discordBot = require("./discordBot");
-
-  fs.readFile(__dirname + "/foo.xml", function (err, data) {
-    transmitDiscordNotification(data);
-  });
+  transmitDeveloperNotification("Subscribed to " + data.topic);
 });
 
 pubSubSubscriber.on("unsubscribe", function (data) {
