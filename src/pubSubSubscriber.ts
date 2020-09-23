@@ -10,7 +10,7 @@ var pubSubSubscriber = pubSubHubBub.createServer(options);
 console.log("pubSubSubscriber options", options);
 // console.log("pubSubSubscriber", pubSubSubscriber);
 
-import transmitDiscordNotification from "./discord/transmitDeveloperNotification";
+import transmitDiscordNotification from "./discord/transmitDiscordNotification";
 import transmitDeveloperNotification from "./discord/transmitDeveloperNotification";
 
 pubSubSubscriber.on("subscribe", function (data: any) {
@@ -32,7 +32,7 @@ pubSubSubscriber.on("unsubscribe", function (data: any) {
 pubSubSubscriber.on("feed", function (data: any) {
   console.log("-------------------FEED-------------------");
   transmitDeveloperNotification("Feed incomming!");
-  transmitDeveloperNotification(data.feed);
+  transmitDeveloperNotification(data.feed.toString());
 
   console.log(data.topic + " feed");
   // console.log(data.hub + " hub");
