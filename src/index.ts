@@ -50,6 +50,7 @@ function subscribe() {
       }
     });
   }
+  console.log("Finished subscribing to feeds...");
 }
 subscribe();
 
