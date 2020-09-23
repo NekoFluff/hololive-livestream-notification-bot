@@ -48,7 +48,9 @@ function transmitDiscordNotification(xml: string | Buffer) {
               )
             )
               continue;
-            (channel as TextChannel).send(embed);
+            (channel as TextChannel).send(
+              embed.url ? `${embed.title}: ${embed.url}` : embed
+            );
           }
         }
       }

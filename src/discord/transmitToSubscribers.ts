@@ -16,7 +16,7 @@ async function transmitToSubscribers(author: string, embed: MessageEmbed) {
     for (const sub of subscriptions) {
       console.log(sub["_id"] + " #" + sub["count"]);
       const user = discordBot.users.cache.get(sub["_id"]);
-      if (user) user.send(embed);
+      if (user) user.send(embed.url ? `${embed.title}: ${embed.url}` : embed);
     }
   } catch (e) {
     transmitDeveloperNotification(
