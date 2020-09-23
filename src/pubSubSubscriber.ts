@@ -40,7 +40,7 @@ pubSubSubscriber.on("feed", function (data: any) {
   console.log("Data feed:", data.feed);
   transmitDiscordNotification(data.feed);
 
-  // console.log(data.feaders + " headers");
+  // console.log(data.headers + " headers");
 });
 
 export default pubSubSubscriber;
