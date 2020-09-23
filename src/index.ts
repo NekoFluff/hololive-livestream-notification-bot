@@ -32,11 +32,11 @@ MongoClient.connect(
 
 function subscribe() {
   var topics = [
-    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=CHANNEL_IDUCyl1z3jo3XHR1riLFKG5UAg", // Watson
-    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=CHANNEL_IDUCMwGHR0BTZuLsmjY_NT5Pwg", // Ninomae
-    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=CHANNEL_IDUCL_qhgtOy0dy1Agp8vkySQg", // Mori
-    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=CHANNEL_IDUCHsx4Hqa-1ORjQTh9TYDhww", // Takanashi
-    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=CHANNEL_IDUCoSrY_IQQVpmIRZ9Xf-y93g", // Gawr Gura
+    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=UCyl1z3jo3XHR1riLFKG5UAg", // Watson
+    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=UCMwGHR0BTZuLsmjY_NT5Pwg", // Ninomae
+    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=UCL_qhgtOy0dy1Agp8vkySQg", // Mori
+    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=UCHsx4Hqa-1ORjQTh9TYDhww", // Takanashi
+    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=UCoSrY_IQQVpmIRZ9Xf-y93g", // Gawr Gura
   ];
   var hub = "http://pubsubhubbub.appspot.com/";
 
