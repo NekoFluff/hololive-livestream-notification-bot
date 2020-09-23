@@ -5,7 +5,7 @@ import transmitDeveloperNotification from "./transmitDeveloperNotification";
 
 const parser = new xml2js.Parser();
 
-function transmitDiscordNotification(xml: string) {
+function transmitDiscordNotification(xml: string | Buffer) {
   parser.parseString(xml, function (err: Error, result: any) {
     if (err) {
       console.error(err);
@@ -40,7 +40,7 @@ function transmitDiscordNotification(xml: string) {
         }
       }
     } catch (e) {
-      transmitDeveloperNotification(e.toString());
+      transmitDeveloperNotification("Error: " + e.toString());
     }
   });
 }

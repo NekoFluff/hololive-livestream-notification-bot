@@ -37,7 +37,7 @@ pubSubSubscriber.on("feed", function (data: any) {
   console.log(data.topic + " feed");
   // console.log(data.hub + " hub");
   // console.log(data.callback + " callback");
-  console.log(data.feed);
+  console.log("Data feed:", data.feed);
   transmitDiscordNotification(data.feed);
 
   // console.log(data.feaders + " headers");
