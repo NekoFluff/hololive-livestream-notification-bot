@@ -1,11 +1,9 @@
-const transmitDiscordNotification = require("./transmitDiscordNotification");
-
-var fs = require("fs");
-
-const discordBot = require("./discordBot");
+import transmitDiscordNotification from "./discord/transmitDiscordNotification";
+import fs from "fs";
+import discordBot from "./discord/discordBot";
 
 discordBot.on("ready", () => {
   fs.readFile(__dirname + "/foo.xml", function (err, data) {
-    transmitDiscordNotification(data);
+    transmitDiscordNotification(data.toString());
   });
 });

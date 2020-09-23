@@ -1,6 +1,8 @@
-import ping from "./ping";
-
 import { Message } from "discord.js";
+import PingCommand from "./ping";
+import UnsubscribeCommand from "./unsubscribe";
+import SubscribeCommand from "./subscribe";
+import GetSubscriptionsCommand from "./getSubscriptions";
 
 export type Command = {
   name: string;
@@ -13,10 +15,10 @@ export type Commands = {
 };
 
 const commands: Commands = {
-  Ping: require("./ping"),
-  Subscribe: require("./subscribe"),
-  UnsubscribeCommand: require("./unsubscribe"),
-  GetSubscriptionsCommand: require("./getSubscriptions"),
+  Ping: PingCommand,
+  Subscribe: UnsubscribeCommand,
+  UnsubscribeCommand: SubscribeCommand,
+  GetSubscriptionsCommand: GetSubscriptionsCommand,
 };
 
 export default commands;

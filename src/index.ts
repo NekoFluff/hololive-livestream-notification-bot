@@ -31,14 +31,18 @@ MongoClient.connect(
   });
 
 function subscribe() {
-  var topics = [
-    "https://www.youtube.com/channel/UCyl1z3jo3XHR1riLFKG5UAg", // Watson
-    "https://www.youtube.com/channel/UCMwGHR0BTZuLsmjY_NT5Pwg", // Ninomae
-    "https://www.youtube.com/channel/UCL_qhgtOy0dy1Agp8vkySQg", // Mori
-    "https://www.youtube.com/channel/UCHsx4Hqa-1ORjQTh9TYDhww", // Takanashi
-    "https://www.youtube.com/channel/UCoSrY_IQQVpmIRZ9Xf-y93g", // Gawr Gura
-  ];
-  var hub = "http://pubsubhubbub.appspot.com/";
+  // var topics = [
+  //   "https://superfeedr-blog-feed.herokuapp.com/",
+  //   "https://www.youtube.com/channel/UCyl1z3jo3XHR1riLFKG5UAg", // Watson
+  //   "https://www.youtube.com/channel/UCMwGHR0BTZuLsmjY_NT5Pwg", // Ninomae
+  //   "https://www.youtube.com/channel/UCL_qhgtOy0dy1Agp8vkySQg", // Mori
+  //   "https://www.youtube.com/channel/UCHsx4Hqa-1ORjQTh9TYDhww", // Takanashi
+  //   "https://www.youtube.com/channel/UCoSrY_IQQVpmIRZ9Xf-y93g", // Gawr Gura
+  // ];
+  // var hub = "http://pubsubhubbub.appspot.com/";
+  console.log("Subscribing to feeds...");
+  var topics = ["http://push-pub.appspot.com/feed"];
+  var hub = "https://pubsubhubbub.superfeedr.com";
   for (const topic of topics) {
     pubSubSubscriber.subscribe(topic, hub, function (err: any) {
       if (err) {

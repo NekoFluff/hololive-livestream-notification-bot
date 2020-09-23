@@ -36,7 +36,7 @@ export default class subscriptionsDAO {
   }
 
   static async addSubscriptions(user: string, newSubs: [string]) {
-    if (user == null) return;
+    if (user == null) return null;
 
     try {
       const _datum = [];

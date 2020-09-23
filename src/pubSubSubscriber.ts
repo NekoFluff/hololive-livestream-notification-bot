@@ -31,13 +31,14 @@ pubSubSubscriber.on("unsubscribe", function (data: any) {
 
 pubSubSubscriber.on("feed", function (data: any) {
   console.log("-------------------FEED-------------------");
+  transmitDeveloperNotification("Feed incomming!");
+  transmitDeveloperNotification(data.feed);
 
   console.log(data.topic + " feed");
   // console.log(data.hub + " hub");
   // console.log(data.callback + " callback");
   console.log(data.feed);
   transmitDiscordNotification(data.feed);
-  transmitDeveloperNotification("Something's happening! " + data.feed);
 
   // console.log(data.feaders + " headers");
 });

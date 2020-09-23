@@ -2,12 +2,21 @@ import { Command } from "./index";
 import subscriptionsDAO from "./../../dao/subscriptionDAO";
 
 const UnsubscribeCommand: Command = {
-  name: "subscribe",
+  name: "unsubscribe",
   description:
     "Recieve notifications by direct messages (DMs) for a hololive-EN member",
-  execute(msg, args) {
-    msg.reply("Unsubscribed from " + args);
-    subscriptionsDAO.removeSubscriptions(msg.author.id, [args.join(" ")]);
+  async execute(msg, args) {
+    const result = await subscriptionsDAO.removeSubscriptions(msg.author.id, [
+      args.join(" "),
+    ]);
+
+    if (result && result.deletedCount && result.deletedCount > 0) {
+      msg.reply("Unsubscribed from " + args);
+    } else {
+      msg.reply(
+        "Oops. Something went wrong. Try again later. You can DM me @Kitsune#1040"
+      );
+    }
   },
 };
 
