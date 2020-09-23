@@ -1,16 +1,19 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
+import pubSubHubBub from "pubsubhubbub";
 
-var pubSubHubbub = require("pubsubhubbub");
 var options = {
-  callbackUrl: process.env.PUBSUBHUBBUB_CALLBACK,
+  callbackUrl: process.env.PUBSUBHUBBUB_CALLBACK || "",
 };
-var pubSubSubscriber = pubSubHubbub.createServer(options);
-console.log("pubSubSubscriber options", options);
-console.log("pubSubSubscriber", pubSubSubscriber);
-const transmitDiscordNotification = require("./transmitDiscordNotification");
-const transmitDeveloperNotification = require("./transmitDeveloperNotification");
+var pubSubSubscriber = pubSubHubBub.createServer(options);
 
-pubSubSubscriber.on("subscribe", function (data) {
+console.log("pubSubSubscriber options", options);
+// console.log("pubSubSubscriber", pubSubSubscriber);
+
+import transmitDiscordNotification from "./discord/transmitDeveloperNotification";
+import transmitDeveloperNotification from "./discord/transmitDeveloperNotification";
+
+pubSubSubscriber.on("subscribe", function (data: any) {
   console.log("-------------------SUBSCRIBE-------------------");
   console.log(data.topic + " subscribed");
   // console.log(data.hub + " hub");
@@ -18,7 +21,7 @@ pubSubSubscriber.on("subscribe", function (data) {
   transmitDeveloperNotification("Subscribed to " + data.topic);
 });
 
-pubSubSubscriber.on("unsubscribe", function (data) {
+pubSubSubscriber.on("unsubscribe", function (data: any) {
   console.log("-------------------UNSUBSCRIBE-------------------");
   console.log(data.topic + " unsubscribed");
   // console.log(data.hub + " hub");
@@ -26,7 +29,7 @@ pubSubSubscriber.on("unsubscribe", function (data) {
   transmitDeveloperNotification("Unsubscribed to " + data.topic);
 });
 
-pubSubSubscriber.on("feed", function (data) {
+pubSubSubscriber.on("feed", function (data: any) {
   console.log("-------------------FEED-------------------");
 
   console.log(data.topic + " feed");
@@ -39,4 +42,4 @@ pubSubSubscriber.on("feed", function (data) {
   // console.log(data.feaders + " headers");
 });
 
-module.exports = pubSubSubscriber;
+export default pubSubSubscriber;

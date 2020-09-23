@@ -34,4 +34,4 @@ function transmitDiscordNotification(xml) {
   });
 }
 
-module.exports = transmitDiscordNotification;
+export default transmitDiscordNotification;
