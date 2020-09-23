@@ -4,7 +4,7 @@ import subscriptionsDAO from "./../../dao/subscriptionDAO";
 const UnsubscribeCommand: Command = {
   name: "unsubscribe",
   description:
-    "Recieve notifications by direct messages (DMs) for a hololive-EN member",
+    "Stop recieving direct messages (DMs) caused by using !subscribe. (e.g. !unsubscribe gawr gura amelia watson)",
   async execute(msg, args) {
     const result = await subscriptionsDAO.removeSubscriptions(
       msg.author.id,

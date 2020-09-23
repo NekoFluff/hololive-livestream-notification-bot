@@ -3,8 +3,7 @@ import subscriptionsDAO from "../../dao/subscriptionDAO";
 
 const getSubscriptionsCommand: Command = {
   name: "getsubscriptions",
-  description:
-    "Recieve notifications by direct messages (DMs) for a hololive-EN member",
+  description: "Get all your subscriptions stored using !subscribe",
   async execute(msg, args) {
     msg.reply("Retrieving subscriptions...");
     try {
