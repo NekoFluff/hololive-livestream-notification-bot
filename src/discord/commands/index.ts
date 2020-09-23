@@ -3,6 +3,7 @@ import PingCommand from "./ping";
 import UnsubscribeCommand from "./unsubscribe";
 import SubscribeCommand from "./subscribe";
 import GetSubscriptionsCommand from "./getSubscriptions";
+import HelpCommand from "./help";
 
 export type Command = {
   name: string;
@@ -15,10 +16,11 @@ export type Commands = {
 };
 
 const commands: Commands = {
-  Ping: PingCommand,
   Subscribe: UnsubscribeCommand,
   UnsubscribeCommand: SubscribeCommand,
   GetSubscriptionsCommand: GetSubscriptionsCommand,
+  Ping: PingCommand,
+  HelpCommand: HelpCommand,
 };
 
 export default commands;

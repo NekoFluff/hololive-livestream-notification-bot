@@ -4,7 +4,7 @@ import subscriptionsDAO from "./../../dao/subscriptionDAO";
 const SubscribeCommand: Command = {
   name: "subscribe",
   description:
-    "Recieve notifications by direct messages (DMs) for a hololive-EN member (e.g. !subscribe gawr gura amelia watson)",
+    "Recieve notifications by direct messages (DMs) for a hololive-EN member\n`!subscribe gawr gura amelia watson`",
   async execute(msg, args) {
     const result = await subscriptionsDAO.addSubscriptions(
       msg.author.id,

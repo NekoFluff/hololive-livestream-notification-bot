@@ -1,18 +1,16 @@
 import commands, { Command } from "./index";
 import { MessageEmbed } from "discord.js";
 
-const UnsubscribeCommand: Command = {
+const HelpCommand: Command = {
   name: "help",
-  description: "Display all available commands",
+  description: "Display all available commands!\n`!help`",
   async execute(msg, args) {
     console.log("Commands: ");
 
-    const embed = new MessageEmbed()
-      .setColor("#0099ff")
-      .setTitle("!help")
-      // .setURL('https://discord.js.org/')
-      // .setAuthor('Some name', 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
-      .setDescription("I hope you find this useful");
+    const embed = new MessageEmbed().setColor("#0099ff").setTitle("Commands");
+    // .setURL('https://discord.js.org/')
+    // .setAuthor('Some name', 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
+    // .setDescription("I hope you find this useful");
     // .setThumbnail('https://i.imgur.com/wSTFkRM.png')
     // .addFields(
     //   { name: 'Regular field title', value: 'Some value here' },
@@ -26,11 +24,15 @@ const UnsubscribeCommand: Command = {
     // .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
 
     Object.keys(commands).map((key: string) => {
-      embed.addField(commands[key].name, commands[key].description, true);
+      embed.addField(
+        process.env.PREFIX + commands[key].name,
+        commands[key].description,
+        false
+      );
     });
 
     msg.channel.send(embed);
   },
 };
 
-export default UnsubscribeCommand;
+export default HelpCommand;
