@@ -35,6 +35,15 @@ function transmitDiscordNotification(xml: string | Buffer) {
               .setDescription(`Published ${published}`)
               .setColor(0xff0000);
 
+            // Skip non-developer servers when developer mode is on
+            if (
+              process.env.DEVELOPER_MODE === "on" &&
+              !(
+                channel.guild.id === "757705063878623343" ||
+                channel.guild.id === "757774890366664774"
+              )
+            )
+              continue;
             (channel as TextChannel).send(embed);
           }
         }
