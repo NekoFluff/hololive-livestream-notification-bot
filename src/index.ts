@@ -32,7 +32,6 @@ MongoClient.connect(
 
 function subscribe() {
   var topics = [
-    "https://superfeedr-blog-feed.herokuapp.com/",
     "https://www.youtube.com/channel/UCyl1z3jo3XHR1riLFKG5UAg", // Watson
     "https://www.youtube.com/channel/UCMwGHR0BTZuLsmjY_NT5Pwg", // Ninomae
     "https://www.youtube.com/channel/UCL_qhgtOy0dy1Agp8vkySQg", // Mori
