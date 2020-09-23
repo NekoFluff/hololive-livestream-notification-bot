@@ -2,6 +2,7 @@ import discordBot from "./discordBot";
 import { MessageEmbed, Channel, TextChannel } from "discord.js";
 import xml2js from "xml2js";
 import transmitDeveloperNotification from "./transmitDeveloperNotification";
+import transmitToSubscribers from "./transmitToSubscribers";
 
 const parser = new xml2js.Parser();
 
@@ -22,19 +23,22 @@ function transmitDiscordNotification(xml: string | Buffer) {
         const published = entry.published[0];
         const link = entry.link[0]["$"].href;
         // const updated = entry.updated[0];
+        const embed = new MessageEmbed()
+          .setTitle(title)
+          .setAuthor(author, undefined, authorURL)
+          .setURL(link)
+          .setDescription(`Published ${published}`)
+          .setColor(0xff0000);
 
+        // Transmit to subscribers
+        transmitToSubscribers(author, embed);
+
+        // Transmit to servers
         for (const [_key, guild] of discordBot.guilds.cache) {
           const channel = guild.channels.cache.find(
             (ch) => ch.name === "hololive-notifications"
           );
           if (channel && channel.type === "text") {
-            const embed = new MessageEmbed()
-              .setTitle(title)
-              .setAuthor(author, undefined, authorURL)
-              .setURL(link)
-              .setDescription(`Published ${published}`)
-              .setColor(0xff0000);
-
             // Skip non-developer servers when developer mode is on
             if (
               process.env.DEVELOPER_MODE === "on" &&

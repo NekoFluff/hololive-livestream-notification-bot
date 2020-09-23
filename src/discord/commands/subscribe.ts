@@ -6,9 +6,10 @@ const SubscribeCommand: Command = {
   description:
     "Recieve notifications by direct messages (DMs) for a hololive-EN member",
   async execute(msg, args) {
-    const result = await subscriptionsDAO.addSubscriptions(msg.author.id, [
-      args.join(" "),
-    ]);
+    const result = await subscriptionsDAO.addSubscriptions(
+      msg.author.id,
+      args.map((value) => value.toLocaleLowerCase())
+    );
     if (result && result.insertedCount > 0) {
       msg.reply("Subscribed to " + args);
     } else {

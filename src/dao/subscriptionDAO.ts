@@ -30,12 +30,39 @@ export default class subscriptionsDAO {
     try {
       return await subscriptions.aggregate(pipeline).toArray();
     } catch (e) {
-      console.error(`Unable to run aggregation, ${e}`);
+      console.error(`Unable to run aggregation: ${e}`);
       throw e;
     }
   }
 
-  static async addSubscriptions(user: string, newSubs: [string]) {
+  static async getSubscriptionsForAuthors(authors: string[]) {
+    let pipeline = [
+      {
+        $match: {
+          subscription: {
+            $in: authors,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$user",
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+    ];
+
+    try {
+      return await subscriptions.aggregate(pipeline).toArray();
+    } catch (e) {
+      console.error(`Unable to run aggregation: ${e}`);
+      throw e;
+    }
+  }
+
+  static async addSubscriptions(user: string, newSubs: string[]) {
     if (user == null) return null;
 
     try {
@@ -55,7 +82,7 @@ export default class subscriptionsDAO {
     }
   }
 
-  static async removeSubscriptions(user: string, subs: [string]) {
+  static async removeSubscriptions(user: string, subs: string[]) {
     if (user == null) return;
 
     const operations = [];

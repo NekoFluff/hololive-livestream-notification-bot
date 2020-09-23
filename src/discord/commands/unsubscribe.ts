@@ -6,9 +6,10 @@ const UnsubscribeCommand: Command = {
   description:
     "Recieve notifications by direct messages (DMs) for a hololive-EN member",
   async execute(msg, args) {
-    const result = await subscriptionsDAO.removeSubscriptions(msg.author.id, [
-      args.join(" "),
-    ]);
+    const result = await subscriptionsDAO.removeSubscriptions(
+      msg.author.id,
+      args.map((value) => value.toLocaleLowerCase())
+    );
 
     if (result && result.deletedCount && result.deletedCount > 0) {
       msg.reply("Unsubscribed from " + args);
