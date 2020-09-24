@@ -5,9 +5,11 @@ const HelpCommand: Command = {
   name: "help",
   description: "Display all available commands!\n`!help`",
   async execute(msg, args) {
-    console.log("Commands: ");
-
-    const embed = new MessageEmbed().setColor("#0099ff").setTitle("Commands");
+    const embed = new MessageEmbed().setColor("#0099ff").setTitle("Help Page");
+    embed.addField(
+      "Setup",
+      "Just make a channel named #hololive-notifications. All push notifications from Youtube will be sent here! (e.g. When a video is uploaded/updated)"
+    );
     // .setURL('https://discord.js.org/')
     // .setAuthor('Some name', 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
     // .setDescription("I hope you find this useful");
