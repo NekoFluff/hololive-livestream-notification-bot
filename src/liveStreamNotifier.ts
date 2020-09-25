@@ -1,6 +1,7 @@
 import axios from "axios";
 import cron, { ScheduledTask } from "node-cron";
 import transmitDiscordNotification from "./discord/transmitDiscordNotification";
+import transmitDeveloperNotification from "./discord/transmitDeveloperNotification";
 
 type LiveStreamData = {
   streamTimestamp: number;
@@ -19,7 +20,8 @@ class LiveStreamNotifier {
 
     // Not livestreaming
     if (!livestreamData) {
-      console.log("Not livestreaming!");
+      console.log(`${author} is not livestreaming at ${url}`);
+      transmitDeveloperNotification(`${author} is not livestreaming at ${url}`);
       return;
     }
 
@@ -63,6 +65,13 @@ class LiveStreamNotifier {
       }
     );
 
+    const formattedTime = this.convertUnixTimestampToReadableDate(
+      livestreamData.streamTimestamp
+    );
+
+    transmitDeveloperNotification(
+      `${author} is livestreaming at ${url} [${formattedTime}]`
+    );
     livestreamData.cronJob = this.scheduleLivestream(cronTimestamp, () => {
       console.log("Running livestream reminder! " + reminderCronTimestamp);
 
@@ -145,6 +154,25 @@ class LiveStreamNotifier {
     const res = text.match(re);
     if (res && res.length > 0) return parseInt(res[0]);
     return null;
+  }
+
+  convertUnixTimestampToReadableDate(unixTimestamp: number) {
+    const date = new Date(unixTimestamp * 1000);
+    const hours = date.getHours();
+    const minutes = "0" + date.getMinutes();
+    const seconds = "0" + date.getSeconds();
+    const dayMonthYear =
+      date.getDate() + " " + date.getMonth() + 1 + " " + date.getFullYear();
+    const formattedTime =
+      dayMonthYear +
+      ", " +
+      hours +
+      ":" +
+      minutes.substr(-2) +
+      ":" +
+      seconds.substr(-2);
+
+    return formattedTime;
   }
 
   convertUnixTimestamp(unixTimestamp: number) {
