@@ -162,15 +162,16 @@ class LiveStreamNotifier {
     const minutes = "0" + date.getMinutes();
     const seconds = "0" + date.getSeconds();
     const dayMonthYear =
-      date.getDate() + " " + date.getMonth() + 1 + " " + date.getFullYear();
+      date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
     const formattedTime =
       dayMonthYear +
-      ", " +
+      " " +
       hours +
       ":" +
       minutes.substr(-2) +
       ":" +
-      seconds.substr(-2);
+      seconds.substr(-2) +
+      date.getTimezoneOffset();
 
     return formattedTime;
   }

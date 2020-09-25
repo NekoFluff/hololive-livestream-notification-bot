@@ -19,7 +19,9 @@ function transmitToServers(embed: MessageEmbed | string) {
       if (typeof embed === "string") (channel as TextChannel).send(embed);
       else
         (channel as TextChannel).send(
-          embed.url ? `${embed.title}: ${embed.url}` : embed
+          embed.url
+            ? `[${embed.author?.name}] ${embed.title}: ${embed.url}`
+            : embed
         );
     }
   }

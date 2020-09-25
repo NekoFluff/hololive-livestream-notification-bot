@@ -1,10 +1,11 @@
 import dotenv from "dotenv";
 import pubSubHubBub from "pubsubhubbub";
-import parseYoutubeXML from "./discord/parseYoutubeXML";
+import parseYoutubeXMLIntoFeedData from "./discord/parseYoutubeXMLIntoFeedData";
 import transmitDeveloperNotification from "./discord/transmitDeveloperNotification";
 // console.log("pubSubSubscriber", pubSubSubscriber);
 import transmitDiscordNotification from "./discord/transmitDiscordNotification";
 import LiveStreamNotifier from "./liveStreamNotifier";
+import createEmbed from "./discord/createEmbed";
 dotenv.config();
 
 var options = {
@@ -41,13 +42,29 @@ pubSubSubscriber.on("feed", async function (data: any) {
   // console.log(data.hub + " hub");
   // console.log(data.callback + " callback");
   console.log("Data feed:", data.feed);
-  const embed = await parseYoutubeXML(data.feed);
-  if (embed) {
-    if (embed.author && embed.author.name) {
-      transmitDiscordNotification(embed.author.name, embed);
-      if (embed.url)
-        liveStreamNotifier.handleURL(embed.author.name!, embed.url);
-    }
+  const feedData = await parseYoutubeXMLIntoFeedData(data.feed);
+
+  if (feedData) {
+    const embed = createEmbed(
+      feedData.title,
+      feedData.author,
+      feedData.authorURL,
+      feedData.link
+    );
+
+    const liveStreamData = await liveStreamNotifier.isLivestream(feedData.link);
+    if (liveStreamData)
+      transmitDiscordNotification(
+        feedData.author,
+        `[${
+          feedData.author
+        }] Livestream at ${liveStreamNotifier.convertUnixTimestampToReadableDate(
+          liveStreamData.streamTimestamp
+        )}\n${feedData.link}`
+      );
+    else transmitDiscordNotification(feedData.author, embed);
+
+    liveStreamNotifier.handleURL(feedData.author, feedData.link);
   }
 
   // console.log(data.headers + " headers");

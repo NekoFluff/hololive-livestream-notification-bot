@@ -21,7 +21,12 @@ async function transmitToSubscribers(
       const user = discordBot.users.cache.get(sub["_id"]);
       if (user)
         if (typeof embed === "string") user.send(embed);
-        else user.send(embed.url ? `${embed.title}: ${embed.url}` : embed);
+        else
+          user.send(
+            embed.url
+              ? `${embed.author?.url} ${embed.title}: ${embed.url}`
+              : embed
+          );
     }
   } catch (e) {
     transmitDeveloperNotification(
