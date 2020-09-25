@@ -13,7 +13,7 @@ var options = {
 };
 var pubSubSubscriber = pubSubHubBub.createServer(options);
 
-const liveStreamNotifier = new LiveStreamNotifier();
+export const liveStreamNotifier = new LiveStreamNotifier();
 
 console.log("pubSubSubscriber options", options);
 

@@ -11,7 +11,10 @@ function transmitDiscordNotification(
 ) {
   const key = author + embed.toString();
 
-  if (onCooldown[key]) return;
+  if (onCooldown[key] === true) {
+    console.log(author + " on cooldown");
+    return;
+  }
   onCooldown[key] = true;
 
   setTimeout(() => {

@@ -2,6 +2,7 @@ import axios from "axios";
 import cron, { ScheduledTask } from "node-cron";
 import transmitDiscordNotification from "./discord/transmitDiscordNotification";
 import transmitDeveloperNotification from "./discord/transmitDeveloperNotification";
+import scheduledLivestreamsDAO from "./dao/scheduledLivestreamsDAO";
 
 type LiveStreamData = {
   streamTimestamp: number;
@@ -15,78 +16,87 @@ class LiveStreamNotifier {
 
   constructor() {}
 
+  async getScheduleFromMongoDB() {
+    // Get data from mongodb
+    const livestreams = await scheduledLivestreamsDAO.getScheduledLivestreams();
+    for (const livestream of livestreams)
+      this.handleURL(livestream.author, livestream.url);
+  }
+
   async handleURL(author: string, url: string) {
-    const livestreamData = await this.isLivestream(url);
+    try {
+      const livestreamData = await this.isLivestream(url);
 
-    // Not livestreaming
-    if (!livestreamData) {
-      console.log(`${author} is not livestreaming at ${url}`);
-      transmitDeveloperNotification(`${author} is not livestreaming at ${url}`);
-      return;
-    }
-
-    // Livestream schedule already exists
-    if (this.scheduledLivestreams[url])
-      if (
-        this.scheduledLivestreams[url].streamTimestamp ===
-        livestreamData.streamTimestamp
-      )
+      // Not livestreaming
+      if (!livestreamData) {
+        console.log(`${author} is not livestreaming at ${url}`);
+        transmitDeveloperNotification(
+          `${author} is not livestreaming at ${url}`
+        );
         return;
-      else {
-        // Unschedule
-        this.cancelScheduledLivestream(url);
       }
 
-    // Parse timestamp
-    const reminderCronTimestamp = this.convertUnixTimestamp(
-      livestreamData.streamTimestamp - 60 * 15
-    );
-    const cronTimestamp = this.convertUnixTimestamp(
-      livestreamData.streamTimestamp
-    );
+      // Livestream schedule already exists
+      if (this.scheduledLivestreams[url])
+        if (
+          this.scheduledLivestreams[url].streamTimestamp ===
+          livestreamData.streamTimestamp
+        )
+          return;
+        else {
+          // Unschedule
+          this.cancelScheduledLivestream(url);
+        }
 
-    // Schedule using cron
-    console.log("Parsed Cron Timestamp", cronTimestamp);
-    // const test = Math.round(new Date().getTime() / 1000) + 60;
-    // const test2 = Math.round(new Date().getTime() / 1000) + 120;
-    // const testUNIX = this.convertUnixTimestamp(test);
-    // const test2UNIX = this.convertUnixTimestamp(test2);
-    livestreamData.reminderCronJob = this.scheduleLivestream(
-      reminderCronTimestamp,
-      () => {
-        console.log(
-          "Running 15 min livestream reminder! " + reminderCronTimestamp
-        );
-
-        transmitDiscordNotification(
-          author,
-          `[${author}] Livestream starting in 15 minutes! ${url}`
-        );
-      }
-    );
-
-    const formattedTime = this.convertUnixTimestampToReadableDate(
-      livestreamData.streamTimestamp
-    );
-
-    transmitDeveloperNotification(
-      `${author} is livestreaming at ${url} [${formattedTime}]`
-    );
-    livestreamData.cronJob = this.scheduleLivestream(cronTimestamp, () => {
-      console.log("Running livestream reminder! " + reminderCronTimestamp);
-
-      transmitDiscordNotification(
-        author,
-        `[${author}] Livestream starting! ${url}`
+      // Schedule 15 min reminder
+      livestreamData.reminderCronJob = this.scheduleLivestream(
+        livestreamData.streamTimestamp - 60 * 15,
+        () => {
+          transmitDiscordNotification(
+            author,
+            `[${author}] Livestream starting in 15 minutes! ${url}`
+          );
+        }
       );
-      delete this.scheduledLivestreams[url];
-    });
 
-    // Store livestream data
-    this.scheduledLivestreams[url] = livestreamData;
+      // Schedule on-time reminder
+      livestreamData.cronJob = this.scheduleLivestream(
+        livestreamData.streamTimestamp,
+        () => {
+          transmitDiscordNotification(
+            author,
+            `[${author}] Livestream starting! ${url}`
+          );
+          delete this.scheduledLivestreams[url];
+        }
+      );
 
-    // Remove cached data
-    this.removeURLData(url);
+      // Also add data to backend
+      scheduledLivestreamsDAO.addScheduledLivestream(
+        author,
+        url,
+        livestreamData.streamTimestamp
+      );
+
+      // Store livestream data
+      this.scheduledLivestreams[url] = livestreamData;
+
+      // Remove cached data
+      this.removeURLData(url);
+
+      // Finally notify the develoepr the scheduling task has been completed
+      const formattedTime = this.convertUnixTimestampToReadableDate(
+        livestreamData.streamTimestamp
+      );
+
+      transmitDeveloperNotification(
+        `${author} is livestreaming at ${url} [${formattedTime}]`
+      );
+    } catch (e) {
+      transmitDeveloperNotification(
+        `Error occured while handling url ${url}. Author: ${author}`
+      );
+    }
   }
 
   cancelScheduledLivestream(url: string) {
@@ -95,7 +105,10 @@ class LiveStreamNotifier {
     delete this.scheduledLivestreams[url];
   }
 
-  scheduleLivestream(cronTimestamp: string, fn: Function) {
+  scheduleLivestream(unixTimestamp: number, fn: Function) {
+    // Parse timestamp
+    const cronTimestamp = this.convertUnixTimestamp(unixTimestamp);
+
     // ┌────────────── second (optional)
     // │ ┌──────────── minute
     // │ │ ┌────────── hour

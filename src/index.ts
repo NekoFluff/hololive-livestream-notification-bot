@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 import { MongoClient } from "mongodb";
+import scheduledLivestreamsDAO from "./dao/scheduledLivestreamsDAO";
 import subscriptionsDAO from "./dao/subscriptionDAO";
-import pubSubSubscriber from "./pubSubSubscriber";
+import pubSubSubscriber, { liveStreamNotifier } from "./pubSubSubscriber";
 import app from "./server";
 dotenv.config();
 
@@ -25,6 +26,9 @@ MongoClient.connect(
   })
   .then(async (clientConnection) => {
     await subscriptionsDAO.injectDB(clientConnection);
+    await scheduledLivestreamsDAO.injectDB(clientConnection);
+    liveStreamNotifier.getScheduleFromMongoDB();
+
     app.listen(port, () => {
       console.log(`Listening on port ${port}`);
     });
