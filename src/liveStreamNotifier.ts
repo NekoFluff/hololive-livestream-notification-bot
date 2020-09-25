@@ -3,6 +3,7 @@ import cron, { ScheduledTask } from "node-cron";
 import transmitDiscordNotification from "./discord/transmitDiscordNotification";
 import transmitDeveloperNotification from "./discord/transmitDeveloperNotification";
 import scheduledLivestreamsDAO from "./dao/scheduledLivestreamsDAO";
+import moment from "moment-timezone";
 
 type LiveStreamData = {
   streamTimestamp: number;
@@ -170,22 +171,10 @@ class LiveStreamNotifier {
   }
 
   convertUnixTimestampToReadableDate(unixTimestamp: number) {
-    const date = new Date(unixTimestamp * 1000);
-    const hours = date.getHours();
-    const minutes = "0" + date.getMinutes();
-    const seconds = "0" + date.getSeconds();
-    const dayMonthYear =
-      date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
-    const formattedTime =
-      dayMonthYear +
-      " " +
-      hours +
-      ":" +
-      minutes.substr(-2) +
-      ":" +
-      seconds.substr(-2) +
-      date.getTimezoneOffset();
-
+    const date = moment(unixTimestamp * 1000);
+    const formattedTime = date
+      .tz("America/Los_Angeles")
+      .format("MMMM Do YYYY, h:mm:ss a z"); // 5am PDT
     return formattedTime;
   }
 

@@ -24,7 +24,7 @@ async function transmitToSubscribers(
         else
           user.send(
             embed.url
-              ? `${embed.author?.url} ${embed.title}: ${embed.url}`
+              ? `${embed.author?.name} ${embed.title}: ${embed.url}`
               : embed
           );
     }
