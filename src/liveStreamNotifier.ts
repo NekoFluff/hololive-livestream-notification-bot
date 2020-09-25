@@ -32,8 +32,7 @@ class LiveStreamNotifier {
         return;
       else {
         // Unschedule
-        this.scheduledLivestreams[url].cronJob?.destroy();
-        delete this.scheduledLivestreams[url];
+        this.cancelScheduledLivestream(url);
       }
 
     // Parse timestamp
@@ -79,6 +78,12 @@ class LiveStreamNotifier {
 
     // Remove cached data
     this.removeURLData(url);
+  }
+
+  cancelScheduledLivestream(url: string) {
+    this.scheduledLivestreams[url].cronJob?.destroy();
+    this.scheduledLivestreams[url].reminderCronJob?.destroy();
+    delete this.scheduledLivestreams[url];
   }
 
   scheduleLivestream(cronTimestamp: string, fn: Function) {
