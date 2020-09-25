@@ -1,17 +1,20 @@
 import dotenv from "dotenv";
-dotenv.config();
 import pubSubHubBub from "pubsubhubbub";
+import parseYoutubeXML from "./discord/parseYoutubeXML";
+import transmitDeveloperNotification from "./discord/transmitDeveloperNotification";
+// console.log("pubSubSubscriber", pubSubSubscriber);
+import transmitDiscordNotification from "./discord/transmitDiscordNotification";
+import LiveStreamNotifier from "./liveStreamNotifier";
+dotenv.config();
 
 var options = {
   callbackUrl: process.env.PUBSUBHUBBUB_CALLBACK || "",
 };
 var pubSubSubscriber = pubSubHubBub.createServer(options);
 
-console.log("pubSubSubscriber options", options);
-// console.log("pubSubSubscriber", pubSubSubscriber);
+const liveStreamNotifier = new LiveStreamNotifier();
 
-import transmitDiscordNotification from "./discord/transmitDiscordNotification";
-import transmitDeveloperNotification from "./discord/transmitDeveloperNotification";
+console.log("pubSubSubscriber options", options);
 
 pubSubSubscriber.on("subscribe", function (data: any) {
   console.log("-------------------SUBSCRIBE-------------------");
@@ -29,7 +32,7 @@ pubSubSubscriber.on("unsubscribe", function (data: any) {
   transmitDeveloperNotification("Unsubscribed to " + data.topic);
 });
 
-pubSubSubscriber.on("feed", function (data: any) {
+pubSubSubscriber.on("feed", async function (data: any) {
   console.log("-------------------FEED-------------------");
   transmitDeveloperNotification("Feed incomming!");
   transmitDeveloperNotification(data.feed.toString());
@@ -38,7 +41,14 @@ pubSubSubscriber.on("feed", function (data: any) {
   // console.log(data.hub + " hub");
   // console.log(data.callback + " callback");
   console.log("Data feed:", data.feed);
-  transmitDiscordNotification(data.feed);
+  const embed = await parseYoutubeXML(data.feed);
+  if (embed) {
+    if (embed.author && embed.author.name) {
+      transmitDiscordNotification(embed.author.name, embed);
+      if (embed.url)
+        liveStreamNotifier.handleURL(embed.author.name!, embed.url);
+    }
+  }
 
   // console.log(data.headers + " headers");
 });

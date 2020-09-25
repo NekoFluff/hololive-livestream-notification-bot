@@ -3,7 +3,10 @@ import subscriptionsDAO from "./../dao/subscriptionDAO";
 import discordBot from "./discordBot";
 import transmitDeveloperNotification from "./transmitDeveloperNotification";
 
-async function transmitToSubscribers(author: string, embed: MessageEmbed) {
+async function transmitToSubscribers(
+  author: string,
+  embed: MessageEmbed | string
+) {
   const names = author.toLocaleLowerCase().split(" ");
 
   try {
@@ -16,7 +19,9 @@ async function transmitToSubscribers(author: string, embed: MessageEmbed) {
     for (const sub of subscriptions) {
       console.log(sub["_id"] + " #" + sub["count"]);
       const user = discordBot.users.cache.get(sub["_id"]);
-      if (user) user.send(embed.url ? `${embed.title}: ${embed.url}` : embed);
+      if (user)
+        if (typeof embed === "string") user.send(embed);
+        else user.send(embed.url ? `${embed.title}: ${embed.url}` : embed);
     }
   } catch (e) {
     transmitDeveloperNotification(
