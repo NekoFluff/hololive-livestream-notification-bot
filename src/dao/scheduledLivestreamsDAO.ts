@@ -47,7 +47,7 @@ export default class scheduledLivestreamsDAO {
         $set: {
           author: author,
           unixTimestamp: unixTimestamp,
-          UTCDate: new Date(unixTimestamp),
+          date: new Date(unixTimestamp),
         },
       };
 
