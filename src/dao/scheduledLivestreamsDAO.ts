@@ -36,24 +36,27 @@ export default class scheduledLivestreamsDAO {
     url: string,
     unixTimestamp: number
   ) {
-    if (url == null || unixTimestamp == null) return null;
+    // if (author == null || url == null || unixTimestamp == null) return null;
 
     try {
       const _filter = {
         url: url,
       };
 
-      const _update = {
-        $set: {
-          author: author,
-          unixTimestamp: unixTimestamp,
-          date: new Date(unixTimestamp),
-        },
+      const _replacement = {
+        author: author,
+        url: url,
+        unixTimestamp: unixTimestamp,
+        date: new Date(unixTimestamp),
       };
 
-      const result = await scheduledLivestreams.updateOne(_filter, _update, {
-        upsert: true,
-      });
+      const result = await scheduledLivestreams.replaceOne(
+        _filter,
+        _replacement,
+        {
+          upsert: true,
+        }
+      );
 
       return result;
     } catch (e) {
