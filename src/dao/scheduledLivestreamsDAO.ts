@@ -47,7 +47,7 @@ export default class scheduledLivestreamsDAO {
         author: author,
         url: url,
         unixTimestamp: unixTimestamp,
-        date: new Date(unixTimestamp),
+        date: new Date(unixTimestamp * 1000),
       };
 
       const result = await scheduledLivestreams.replaceOne(
@@ -57,6 +57,8 @@ export default class scheduledLivestreamsDAO {
           upsert: true,
         }
       );
+
+      console.log("Livestream schedule result:", result);
 
       return result;
     } catch (e) {
