@@ -54,7 +54,7 @@ pubSubSubscriber.on("feed", async function (data: any) {
 
     const liveStreamData = await liveStreamNotifier.isLivestream(feedData.link);
     const liveStreamDate = liveStreamData
-      ? new Date(liveStreamData.streamTimestamp)
+      ? new Date(liveStreamData.streamTimestamp * 1000)
       : new Date();
     const currentDate = new Date();
     const isFutureDate = liveStreamDate > currentDate;
