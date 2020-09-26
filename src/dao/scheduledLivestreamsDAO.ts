@@ -23,7 +23,7 @@ export default class scheduledLivestreamsDAO {
   static async getScheduledLivestreams() {
     try {
       const results = await scheduledLivestreams.find().toArray();
-      console.log("Current schedule:", results);
+      console.log("Current schedule (from MongoDB):", results);
       return results;
     } catch (e) {
       console.error(`Unable to run aggregation: ${e}`);

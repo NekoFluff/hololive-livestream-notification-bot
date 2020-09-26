@@ -4,6 +4,7 @@ import scheduledLivestreamsDAO from "./dao/scheduledLivestreamsDAO";
 import subscriptionsDAO from "./dao/subscriptionDAO";
 import pubSubSubscriber, { liveStreamNotifier } from "./pubSubSubscriber";
 import app from "./server";
+import feedsDAO, { Feed } from "./dao/feedsDAO";
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -27,38 +28,39 @@ MongoClient.connect(
   .then(async (clientConnection) => {
     await subscriptionsDAO.injectDB(clientConnection);
     await scheduledLivestreamsDAO.injectDB(clientConnection);
+    await feedsDAO.injectDB(clientConnection);
     liveStreamNotifier.getScheduleFromMongoDB();
 
     app.listen(port, () => {
       console.log(`Listening on port ${port}`);
     });
+
+    var feeds = await feedsDAO.getFeeds();
+    subscribe(feeds);
+
+    // Reschedule feeds
+    setInterval(() => {
+      console.log("Re-subscribing to feeds...");
+      subscribe(feeds);
+    }, 43100 * 1000);
   });
 
-function subscribe() {
-  var topics = [
-    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=UCyl1z3jo3XHR1riLFKG5UAg", // Watson
-    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=UCMwGHR0BTZuLsmjY_NT5Pwg", // Ninomae
-    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=UCL_qhgtOy0dy1Agp8vkySQg", // Mori
-    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=UCHsx4Hqa-1ORjQTh9TYDhww", // Takanashi
-    "https://www.youtube.com/xml/feeds/videos.xml?channel_id=UCoSrY_IQQVpmIRZ9Xf-y93g", // Gawr Gura
-  ];
+function subscribe(feeds: Feed[]) {
   var hub = "http://pubsubhubbub.appspot.com/";
 
   console.log("Subscribing to feeds...");
   // var topics = ["http://push-pub.appspot.com/feed"];
   // var hub = "https://pubsubhubbub.superfeedr.com";
-  for (const topic of topics) {
-    pubSubSubscriber.subscribe(topic, hub, function (err: any) {
+  for (const feed of feeds) {
+    pubSubSubscriber.subscribe(feed.topicURL, hub, function (err: any) {
       if (err) {
         console.log("Failed subscribing", err);
+      } else {
+        console.log(
+          "Subscribed to feed: " + feed.firstName + " " + feed.topicURL
+        );
       }
     });
   }
   console.log("Finished subscribing to feeds...");
 }
-subscribe();
-
-let _reschedulerId = setInterval(() => {
-  console.log("Re-subscribing...");
-  subscribe();
-}, 43100 * 1000);

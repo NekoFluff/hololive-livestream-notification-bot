@@ -1,6 +1,15 @@
-import { Collection, MongoClient } from "mongodb";
+import { Collection, MongoClient, ObjectID } from "mongodb";
 
 let feeds: Collection;
+
+export type Feed = {
+  _id: ObjectID;
+  firstName: string;
+  lastName: string;
+  topicURL: string;
+  group: string;
+  generation: number;
+};
 
 export default class feedsDAO {
   static async injectDB(conn: MongoClient) {
@@ -15,7 +24,7 @@ export default class feedsDAO {
 
   static async getFeeds() {
     try {
-      return await feeds.find().toArray();
+      return (await feeds.find().toArray()) as Feed[];
     } catch (e) {
       console.error(`Unable to run aggregation: ${e}`);
       throw e;
