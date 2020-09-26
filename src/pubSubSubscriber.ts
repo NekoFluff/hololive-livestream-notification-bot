@@ -53,7 +53,12 @@ pubSubSubscriber.on("feed", async function (data: any) {
     );
 
     const liveStreamData = await liveStreamNotifier.isLivestream(feedData.link);
-    if (liveStreamData)
+    const liveStreamDate = liveStreamData
+      ? new Date(liveStreamData.streamTimestamp)
+      : new Date();
+    const currentDate = new Date();
+    const isFutureDate = liveStreamDate > currentDate;
+    if (liveStreamData && isFutureDate)
       transmitDiscordNotification(
         feedData.author,
         `[${
@@ -62,7 +67,7 @@ pubSubSubscriber.on("feed", async function (data: any) {
           liveStreamData.streamTimestamp
         )}\n${feedData.link}`
       );
-    else transmitDiscordNotification(feedData.author, embed);
+    // else transmitDiscordNotification(feedData.author, embed);
 
     liveStreamNotifier.handleURL(feedData.author, feedData.link);
   }
