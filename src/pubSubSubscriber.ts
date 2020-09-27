@@ -35,7 +35,7 @@ pubSubSubscriber.on("unsubscribe", function (data: any) {
 
 pubSubSubscriber.on("feed", async function (data: any) {
   console.log("-------------------FEED-------------------");
-  transmitDeveloperNotification("Feed incomming!");
+  transmitDeveloperNotification("Feed incoming!");
   transmitDeveloperNotification(data.feed.toString());
 
   console.log(data.topic + " feed");
@@ -59,16 +59,20 @@ pubSubSubscriber.on("feed", async function (data: any) {
     const currentDate = new Date();
     const isFutureDate = liveStreamDate > currentDate;
     if (liveStreamData && isFutureDate) {
-      transmitDiscordNotification(
+      const newLivestreamScheduled = liveStreamNotifier.handleURL(
         feedData.author,
-        `[${
-          feedData.author
-        }] Livestream on ${liveStreamNotifier.convertUnixTimestampToReadableDate(
-          liveStreamData.streamTimestamp
-        )}\n${feedData.link}`
+        feedData.link
       );
 
-      liveStreamNotifier.handleURL(feedData.author, feedData.link);
+      if (newLivestreamScheduled)
+        transmitDiscordNotification(
+          feedData.author,
+          `[${
+            feedData.author
+          }] Livestream on ${liveStreamNotifier.convertUnixTimestampToReadableDate(
+            liveStreamData.streamTimestamp
+          )}\n${feedData.link}`
+        );
     }
     // else transmitDiscordNotification(feedData.author, embed);
   }

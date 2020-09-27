@@ -34,7 +34,7 @@ class LiveStreamNotifier {
         transmitDeveloperNotification(
           `${author} is not livestreaming at ${url}`
         );
-        return;
+        return false;
       }
 
       // Livestream schedule already exists
@@ -43,7 +43,7 @@ class LiveStreamNotifier {
           this.scheduledLivestreams[url].streamTimestamp ===
           livestreamData.streamTimestamp
         )
-          return;
+          return false;
         else {
           // Unschedule
           this.cancelScheduledLivestream(url);
@@ -93,11 +93,21 @@ class LiveStreamNotifier {
       transmitDeveloperNotification(
         `${author} is livestreaming at ${url} [${formattedTime}]`
       );
+
+      // Successfully scheduled a livestream
+      return true;
     } catch (e) {
       transmitDeveloperNotification(
         `Error occured while handling url ${url}. Author: ${author}`
       );
     }
+
+    // Did not successfully schedule a livestream
+    return false;
+  }
+
+  isLivestreamScheduled(url: string) {
+    return this.scheduledLivestreams[url] != null;
   }
 
   cancelScheduledLivestream(url: string) {
