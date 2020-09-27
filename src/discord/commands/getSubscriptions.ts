@@ -2,8 +2,9 @@ import { Command } from "./index";
 import subscriptionsDAO from "../../dao/subscriptionDAO";
 
 const getSubscriptionsCommand: Command = {
-  name: "getsubscriptions",
-  description: "Get all your subscriptions stored using `!subscribe`",
+  name: "getsubs",
+  description:
+    "Get all your subscriptions registered with `!subscribe`.\n`!getsubs`",
   async execute(msg, args) {
     msg.reply("Retrieving subscriptions...");
     try {

@@ -16,8 +16,8 @@ export type Commands = {
 };
 
 const commands: Commands = {
-  Subscribe: UnsubscribeCommand,
-  UnsubscribeCommand: SubscribeCommand,
+  Subscribe: SubscribeCommand,
+  UnsubscribeCommand: UnsubscribeCommand,
   GetSubscriptionsCommand: GetSubscriptionsCommand,
   Ping: PingCommand,
   HelpCommand: HelpCommand,

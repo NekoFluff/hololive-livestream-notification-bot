@@ -3,7 +3,7 @@ import { MessageEmbed } from "discord.js";
 
 const HelpCommand: Command = {
   name: "help",
-  description: "Display all available commands!\n`!help`",
+  description: "Display all available commands!",
   async execute(msg, args) {
     const embed = new MessageEmbed().setColor("#0099ff").setTitle("Help Page");
     embed.addField(
