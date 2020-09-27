@@ -1,6 +1,6 @@
-# Hololive-EN Notification Bot
+# Hololive Livestream Notification Bot
 
-Notifies the server of youtube updates from Hololive-EN
+Sends notifications when livestreams from hololive are about to begin. (15 minutes prior and on time)
 
 Requires a server text room with the name `hololive-notifications`
 
