@@ -63,7 +63,7 @@ pubSubSubscriber.on("feed", async function (data: any) {
         feedData.author,
         `[${
           feedData.author
-        }] Livestream at ${liveStreamNotifier.convertUnixTimestampToReadableDate(
+        }] Livestream on ${liveStreamNotifier.convertUnixTimestampToReadableDate(
           liveStreamData.streamTimestamp
         )}\n${feedData.link}`
       );
