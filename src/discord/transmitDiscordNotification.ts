@@ -3,7 +3,7 @@ import transmitToSubscribers from "./transmitToSubscribers";
 import transmitToServers from "./transmitToServers";
 
 const onCooldown: { [key: string]: boolean } = {};
-const cooldownTimer = 1 * 60 * 1000; // 1 minute cooldown
+const cooldownTimer = 15 * 60 * 1000; // 15 minute cooldown
 
 function transmitDiscordNotification(
   author: string,
