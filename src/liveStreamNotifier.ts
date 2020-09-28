@@ -38,7 +38,7 @@ class LiveStreamNotifier {
       }
 
       // Livestream schedule already exists
-      if (this.scheduledLivestreams[url])
+      if (this.scheduledLivestreams[url]) {
         if (
           this.scheduledLivestreams[url].streamTimestamp ===
           livestreamData.streamTimestamp
@@ -48,6 +48,7 @@ class LiveStreamNotifier {
           // Unschedule
           this.cancelScheduledLivestream(url);
         }
+      }
 
       // Schedule 15 min reminder
       livestreamData.reminderCronJob = this.scheduleLivestream(
