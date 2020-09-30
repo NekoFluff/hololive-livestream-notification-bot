@@ -16,7 +16,7 @@ async function parseYoutubeXMLIntoFeedData(xml: string | Buffer) {
     const result = await parser.parseStringPromise(xml);
     const feed = result["feed"];
 
-    // console.log("Feed Entry:", feed.entry);
+    console.log("Feed Entry:", feed.entry);
     if (feed.entry.length > 0) {
       const entry = feed.entry[0];
 
@@ -32,7 +32,7 @@ async function parseYoutubeXMLIntoFeedData(xml: string | Buffer) {
       return feedData;
     }
   } catch (e) {
-    transmitDeveloperNotification("Error: " + e.toString());
+    transmitDeveloperNotification("Parsing Error: " + e.toString());
   }
 
   return null;
