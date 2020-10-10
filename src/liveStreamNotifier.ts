@@ -84,11 +84,11 @@ class LiveStreamNotifier {
       );
 
       // Also add data to backend
-      // scheduledLivestreamsDAO.addScheduledLivestream(
-      //   author,
-      //   url,
-      //   livestreamData.streamTimestamp
-      // );
+      scheduledLivestreamsDAO.addScheduledLivestream(
+        author,
+        url,
+        livestreamData.streamTimestamp
+      );
 
       // Store livestream data
       this.scheduledLivestreams[url] = livestreamData;
