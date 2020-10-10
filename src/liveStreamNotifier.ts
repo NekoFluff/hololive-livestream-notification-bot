@@ -84,11 +84,11 @@ class LiveStreamNotifier {
       );
 
       // Also add data to backend
-      scheduledLivestreamsDAO.addScheduledLivestream(
-        author,
-        url,
-        livestreamData.streamTimestamp
-      );
+      // scheduledLivestreamsDAO.addScheduledLivestream(
+      //   author,
+      //   url,
+      //   livestreamData.streamTimestamp
+      // );
 
       // Store livestream data
       this.scheduledLivestreams[url] = livestreamData;
@@ -108,9 +108,9 @@ class LiveStreamNotifier {
       // Successfully scheduled a livestream
       return true;
     } catch (e) {
-      transmitDeveloperNotification(
-        `Error occured while handling url ${url}. Author: ${author}`
-      );
+      const errorMsg = `Error occured while handling url ${url}. Author: ${author}\nError: ${e}`;
+      transmitDeveloperNotification(errorMsg);
+      console.log(errorMsg);
     }
 
     // Did not successfully schedule a livestream

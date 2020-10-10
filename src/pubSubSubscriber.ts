@@ -83,7 +83,7 @@ pubSubSubscriber.on("feed", async function (data: any) {
     }
     // else transmitDiscordNotification(feedData.author, embed);
   } else {
-    transmitDeveloperNotification("Invalid feed data:");
+    transmitDeveloperNotification("Invalid feed data provided");
   }
 
   // console.log(data.headers + " headers");
