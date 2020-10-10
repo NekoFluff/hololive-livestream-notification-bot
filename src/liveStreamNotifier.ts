@@ -35,18 +35,28 @@ class LiveStreamNotifier {
           `${author} is not livestreaming at ${url}`
         );
         return false;
+      } else {
+        transmitDeveloperNotification(`${author} IS livestreaming at ${url}`);
       }
 
       // Livestream schedule already exists
       if (this.scheduledLivestreams[url]) {
+        transmitDeveloperNotification(
+          "Livestream already exists: " + this.scheduledLivestreams[url]
+        );
         if (
           this.scheduledLivestreams[url].streamTimestamp ===
           livestreamData.streamTimestamp
-        )
+        ) {
+          transmitDeveloperNotification(
+            "Livestream date is exactly the same. Doing nothing..."
+          );
+
           return false;
-        else {
-          // Unschedule
+        } else {
+          // Unschedule old one. Reschedule with new date
           this.cancelScheduledLivestream(url);
+          transmitDeveloperNotification("Cancelling existing livestream...");
         }
       }
 

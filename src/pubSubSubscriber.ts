@@ -41,7 +41,7 @@ pubSubSubscriber.on("feed", async function (data: any) {
   console.log(data.topic + " feed");
   // console.log(data.hub + " hub");
   // console.log(data.callback + " callback");
-  console.log("Data feed:", data.feed);
+  console.log("Data feed:" + data.feed.toString());
   const feedData = await parseYoutubeXMLIntoFeedData(data.feed);
 
   if (feedData) {
@@ -73,8 +73,17 @@ pubSubSubscriber.on("feed", async function (data: any) {
             liveStreamData.streamTimestamp
           )}\n${feedData.link}`
         );
+    } else {
+      transmitDeveloperNotification(
+        "Skipping transmittion. IsFutureDate: " + isFutureDate
+      );
+      transmitDeveloperNotification(
+        "Skipping transmittion. LiveStreamData: " + liveStreamData
+      );
     }
     // else transmitDiscordNotification(feedData.author, embed);
+  } else {
+    transmitDeveloperNotification("Invalid feed data:");
   }
 
   // console.log(data.headers + " headers");
