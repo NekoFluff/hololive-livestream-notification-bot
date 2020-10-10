@@ -101,9 +101,7 @@ class LiveStreamNotifier {
         livestreamData.streamTimestamp
       );
 
-      transmitDeveloperNotification(
-        `${author} is livestreaming at ${url} [${formattedTime}]`
-      );
+      transmitDeveloperNotification(`Livestream timestamp: [${formattedTime}]`);
 
       // Successfully scheduled a livestream
       return true;

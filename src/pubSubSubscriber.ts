@@ -75,7 +75,7 @@ pubSubSubscriber.on("feed", async function (data: any) {
         );
     } else {
       transmitDeveloperNotification(
-        `Skipping transmittion.\nIsFutureDate: ${isFutureDate}\nLiveStreamData: ${liveStreamData}`
+        `Skipping transmition.\nIsFutureDate: ${isFutureDate}\nLiveStreamData: ${liveStreamData}`
       );
     }
     // else transmitDiscordNotification(feedData.author, embed);
