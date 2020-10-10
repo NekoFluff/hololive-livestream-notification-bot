@@ -108,7 +108,7 @@ class LiveStreamNotifier {
       // Successfully scheduled a livestream
       return true;
     } catch (e) {
-      const errorMsg = `Error occured while handling url ${url}. Author: ${author}\nError: ${e}`;
+      const errorMsg = `Error occured while handling url ${url}.\nAuthor: ${author}\nError: ${e}`;
       transmitDeveloperNotification(errorMsg);
       console.log(errorMsg);
     }

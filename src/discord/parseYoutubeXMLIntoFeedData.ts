@@ -30,7 +30,7 @@ async function parseYoutubeXMLIntoFeedData(xml: string | Buffer) {
       };
 
       transmitDeveloperNotification(
-        `Feed data parsed:\n${feedData.author}\n${feedData.title}\n${feedData.link}`
+        `Feed data parsed.\nAuthor: ${feedData.author}\nTitle: ${feedData.title}\nLink: ${feedData.link}`
       );
 
       return feedData;
