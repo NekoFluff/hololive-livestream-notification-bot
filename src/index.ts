@@ -2,9 +2,9 @@ import dotenv from "dotenv";
 import { MongoClient } from "mongodb";
 import scheduledLivestreamsDAO from "./dao/scheduledLivestreamsDAO";
 import subscriptionsDAO from "./dao/subscriptionDAO";
+import feedsDAO, { Feed } from "./dao/feedsDAO";
 import pubSubSubscriber, { liveStreamNotifier } from "./pubSubSubscriber";
 import app from "./server";
-import feedsDAO, { Feed } from "./dao/feedsDAO";
 dotenv.config();
 
 const port = process.env.PORT || 3000;
