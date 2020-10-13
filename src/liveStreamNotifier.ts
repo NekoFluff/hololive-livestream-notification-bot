@@ -161,7 +161,11 @@ class LiveStreamNotifier {
   }
 
   async getURLData(url: string) {
-    if (!this.urlData[url]) this.urlData[url] = (await axios.get(url)).data;
+    try {
+      if (!this.urlData[url]) this.urlData[url] = (await axios.get(url)).data;
+    } catch (e) {
+      transmitDeveloperNotification(`Axios error encountered:\n${e}`);
+    }
     return this.urlData[url];
   }
 
@@ -170,15 +174,21 @@ class LiveStreamNotifier {
   }
 
   async isLivestream(url: string) {
-    const data = await this.getURLData(url);
-    const timestamp = this.getStreamTimestamp(data);
+    try {
+      const data = await this.getURLData(url);
+      const timestamp = this.getStreamTimestamp(data);
 
-    if (timestamp) {
-      const livestream: LiveStreamData = {
-        streamTimestamp: timestamp,
-      };
-      return livestream;
-    } else return null;
+      if (timestamp) {
+        const livestream: LiveStreamData = {
+          streamTimestamp: timestamp,
+        };
+        return livestream;
+      }
+    } catch (e) {
+      transmitDeveloperNotification(`Cannot determine if livestream:\n${e}`);
+    }
+
+    return null;
   }
 
   getStreamTimestamp(text: string) {
