@@ -45,12 +45,12 @@ pubSubSubscriber.on("feed", async function (data: any) {
   const feedData = await parseYoutubeXMLIntoFeedData(data.feed);
 
   if (feedData) {
-    const embed = createEmbed(
-      feedData.title,
-      feedData.author,
-      feedData.authorURL,
-      feedData.link
-    );
+    // const embed = createEmbed(
+    //   feedData.title,
+    //   feedData.author,
+    //   feedData.authorURL,
+    //   feedData.link
+    // );
 
     const liveStreamData = await liveStreamNotifier.isLivestream(feedData.link);
     const liveStreamDate = liveStreamData
@@ -58,11 +58,20 @@ pubSubSubscriber.on("feed", async function (data: any) {
       : new Date();
     const currentDate = new Date();
     const isFutureDate = liveStreamDate > currentDate;
+    transmitDeveloperNotification("Live stream data and future date");
+    transmitDeveloperNotification(
+      `IsFutureDate: ${isFutureDate}\nLiveStreamData: ${liveStreamData}`
+    );
+
     if (liveStreamData && isFutureDate) {
+      transmitDeveloperNotification("Handling URL...");
+
       const newLivestreamScheduled = liveStreamNotifier.handleURL(
         feedData.author,
         feedData.link
       );
+
+      transmitDeveloperNotification("Successfully handled URL...");
 
       if (newLivestreamScheduled)
         transmitDiscordNotification(
@@ -73,6 +82,7 @@ pubSubSubscriber.on("feed", async function (data: any) {
             liveStreamData.streamTimestamp
           )}\n${feedData.link}`
         );
+      else transmitDeveloperNotification("Not scheduling livestream...");
     } else {
       transmitDeveloperNotification(
         `Skipping transmition.\nIsFutureDate: ${isFutureDate}\nLiveStreamData: ${liveStreamData}`
