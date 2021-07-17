@@ -14,7 +14,7 @@
   "author": "Alexander Nou",
   "license": "ISC",
   "dependencies": {
-    "@asnou/mongodb-wrapper": "^2.0.1",
+    "@asnou/mongodb-wrapper": "^2.0.2",
     "@types/cors": "^2.8.7",
     "@types/express": "^4.17.8",
     "@types/mongodb": "^3.5.27",
