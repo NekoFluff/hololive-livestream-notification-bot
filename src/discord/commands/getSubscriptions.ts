@@ -1,5 +1,7 @@
 import { Command } from "discord-messenger";
-import subscriptionsDAO from "../../dao/subscriptionDAO";
+import SubscriptionsRepository from "../../repos/SubscriptionsRepository";
+
+const subscriptionRepo = new SubscriptionsRepository();
 
 const getSubscriptionsCommand: Command = {
   name: "getsubs",
@@ -8,7 +10,7 @@ const getSubscriptionsCommand: Command = {
   async execute(msg, args) {
     msg.reply("Retrieving subscriptions...");
     try {
-      const result = await subscriptionsDAO.getSubscriptions(msg.author.id);
+      const result = Object.values(await subscriptionRepo.getSubscriptions(msg.author.id));
       if (result.length > 0) {
         const response = result
           .map((value) => {
@@ -21,7 +23,7 @@ const getSubscriptionsCommand: Command = {
       }
     } catch (e) {
       msg.reply(
-        "Oops. Something went wrong. Try again later. You can DM me @Kitsune#1040"
+        "Oops. Something went wrong. Try again later. You can DM me ＠きつね#1040"
       );
     }
   },

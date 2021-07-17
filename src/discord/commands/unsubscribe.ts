@@ -1,12 +1,14 @@
 import { Command } from "discord-messenger";
-import subscriptionsDAO from "./../../dao/subscriptionDAO";
+import SubscriptionsRepository from "./../../repos/SubscriptionsRepository";
+
+const subscriptionsRepo = new SubscriptionsRepository();
 
 const UnsubscribeCommand: Command = {
   name: "unsubscribe",
   description:
     "Stop recieving direct messages (DMs) caused by using !subscribe.\n`!unsubscribe gawr gura amelia watson`",
   async execute(msg, args) {
-    const result = await subscriptionsDAO.removeSubscriptions(
+    const result = await subscriptionsRepo.removeSubscriptions(
       msg.author.id,
       args.map((value) => value.toLocaleLowerCase())
     );
@@ -15,7 +17,7 @@ const UnsubscribeCommand: Command = {
       msg.reply("Unsubscribed from " + args);
     } else {
       msg.reply(
-        "Oops. Something went wrong. Try again later. You can DM me @Kitsune#1040"
+        "Oops. Something went wrong. Try again later. You can DM me ＠きつね#1040"
       );
     }
   },

@@ -1,6 +1,6 @@
 import axios from "axios";
 import cron, { ScheduledTask } from "node-cron";
-import scheduledLivestreamsDAO from "./dao/scheduledLivestreamsDAO";
+import LivestreamsRepository, { Livestream } from "./repos/LivestreamsRepository";
 import moment from "moment-timezone";
 import { DiscordMessenger } from "discord-messenger";
 
@@ -8,20 +8,23 @@ const messenger = DiscordMessenger.getMessenger();
 
 type LiveStreamData = {
   streamTimestamp: number;
-  cronJob?: ScheduledTask;
+  liveCronJob?: ScheduledTask;
   reminderCronJob?: ScheduledTask; // Reminder 15 minutes prior to stream
 };
 
 class LiveStreamNotifier {
   scheduledLivestreams: { [key: string]: LiveStreamData } = {};
   urlData: { [key: string]: string } = {};
+  livestreamsRepo: LivestreamsRepository;
 
-  constructor() { }
+  constructor() {
+    this.livestreamsRepo = new LivestreamsRepository();
+  }
 
   async getScheduleFromMongoDB() {
     // Get data from mongodb
-    const livestreams = await scheduledLivestreamsDAO.getScheduledLivestreams();
-    for (const livestream of livestreams)
+    const livestreams = await this.livestreamsRepo.getLivestreams();
+    for (const livestream of Object.values(livestreams))
       this.handleURL(livestream.author, livestream.url);
   }
 
@@ -73,23 +76,29 @@ class LiveStreamNotifier {
       );
 
       // Schedule on-time reminder
-      livestreamData.cronJob = this.scheduleLivestream(
+      livestreamData.liveCronJob = this.scheduleLivestream(
         livestreamData.streamTimestamp,
         () => {
           messenger.transmitDiscordNotification(
             author,
-            `[${author}] Livestream starting! ${url}`
+            `[${author}] Livestream starting! ${url}`,
+            {
+              channel: "hololive-stream-started"
+            }
           );
           delete this.scheduledLivestreams[url];
         }
       );
 
-      // Also add data to backend
-      scheduledLivestreamsDAO.addScheduledLivestream(
+      const livestream: Livestream = {
+        _id: url,
         author,
         url,
-        livestreamData.streamTimestamp
-      );
+        date: new Date(livestreamData.streamTimestamp * 1000)
+      }
+
+      // Also add data to backend
+      this.livestreamsRepo.addLivestreams([livestream]);
 
       // Store livestream data
       this.scheduledLivestreams[url] = livestreamData;
@@ -121,7 +130,7 @@ class LiveStreamNotifier {
   }
 
   cancelScheduledLivestream(url: string) {
-    this.scheduledLivestreams[url].cronJob?.destroy();
+    this.scheduledLivestreams[url].liveCronJob?.destroy();
     this.scheduledLivestreams[url].reminderCronJob?.destroy();
     delete this.scheduledLivestreams[url];
   }

@@ -1,26 +1,27 @@
-import { Collection, MongoClient } from "mongodb";
+import { Collection } from "@asnou/mongodb-wrapper";
 
-let subscriptions: Collection;
+export type SubscriptionName = string;
 
-export default class subscriptionsDAO {
-  static async injectDB(conn: MongoClient) {
-    if (subscriptions) return;
+export class Subscription {
+  ["_id"]: any;
+  ["user"]: string;
+  ["subscription"]: string;
+};
 
-    try {
-      subscriptions = await conn
-        .db(process.env.DATABASE_NAMESPACE)
-        .collection("subscriptions");
-    } catch (e) {
-      console.error(
-        `Unable to establish collection handles in subscriptionsDAO: ${e}`
-      );
-    }
+export default class SubscriptionsRepository extends Collection<Subscription> {
+  constructor() {
+    super("hololive-en", "subscriptions", Subscription);
   }
 
   /**
-   * Finds the market price stored in the 'marketPrice' collection
+   * @returns A record of portfolio name (id) to Subscription object.
    */
-  static async getSubscriptions(user: string) {
+  async getAllSubscriptions(): Promise<Record<SubscriptionName, Subscription>> {
+    const filter = {};
+    return super.find(filter);
+  }
+
+  async getSubscriptions(user: string) {
     let pipeline = [
       { $match: { user: user } },
       // { $match: { $text: { $search: user } } },
@@ -28,14 +29,14 @@ export default class subscriptionsDAO {
     ];
 
     try {
-      return await subscriptions.aggregate(pipeline).toArray();
+      return await super.aggregate(pipeline);
     } catch (e) {
       console.error(`Unable to run aggregation: ${e}`);
       throw e;
     }
   }
 
-  static async getSubscriptionsForAuthors(authors: string[]) {
+  async getSubscriptionsForAuthors(authors: string[]) {
     let pipeline = [
       {
         $match: {
@@ -55,14 +56,14 @@ export default class subscriptionsDAO {
     ];
 
     try {
-      return await subscriptions.aggregate(pipeline).toArray();
+      return await super.aggregate(pipeline);
     } catch (e) {
       console.error(`Unable to run aggregation: ${e}`);
       throw e;
     }
   }
 
-  static async addSubscriptions(user: string, newSubs: string[]) {
+  async addSubscriptions(user: string, newSubs: string[]) {
     if (user == null) return null;
 
     try {
@@ -74,7 +75,7 @@ export default class subscriptionsDAO {
         };
         _datum.push(_data);
       }
-      const result = await subscriptions.insertMany(_datum, { ordered: false });
+      const result = await (await this.getCollection()).insertMany(_datum, { ordered: false });
 
       return result;
     } catch (e) {
@@ -82,7 +83,7 @@ export default class subscriptionsDAO {
     }
   }
 
-  static async removeSubscriptions(user: string, subs: string[]) {
+  async removeSubscriptions(user: string, subs: string[]) {
     if (user == null) return;
 
     const operations = [];
@@ -91,7 +92,8 @@ export default class subscriptionsDAO {
         deleteOne: { filter: { user: user, subscription: sub } },
       });
     }
-    const result = await subscriptions.bulkWrite(operations, {
+
+    const result = await (await this.getCollection()).bulkWrite(operations, {
       ordered: false,
     });
 

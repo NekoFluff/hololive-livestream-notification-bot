@@ -1,12 +1,14 @@
 import { Command } from "discord-messenger";
-import subscriptionsDAO from "./../../dao/subscriptionDAO";
+import SubscriptionsRepository from "./../../repos/SubscriptionsRepository";
+
+const subscriptionRepo = new SubscriptionsRepository();
 
 const SubscribeCommand: Command = {
   name: "subscribe",
   description:
     "Recieve notifications by direct messages (DMs) for a hololive-EN member\n`!subscribe gawr gura amelia watson`",
   async execute(msg, args) {
-    const result = await subscriptionsDAO.addSubscriptions(
+    const result = await subscriptionRepo.addSubscriptions(
       msg.author.id,
       args.map((value) => value.toLocaleLowerCase())
     );
@@ -14,7 +16,7 @@ const SubscribeCommand: Command = {
       msg.reply("Subscribed to " + args);
     } else {
       msg.reply(
-        "Oops. Something went wrong. Try again later. You can DM me @Kitsune#1040"
+        "Oops. Something went wrong. Try again later. You can DM me ＠きつね#1040"
       );
     }
   },
