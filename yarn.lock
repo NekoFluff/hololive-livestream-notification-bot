@@ -690,10 +690,10 @@ diff@^4.0.1:
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
   integrity sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==
 
-discord-messenger@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/discord-messenger/-/discord-messenger-1.0.4.tgz#e7622d1b6b46a0f7aa0b272b555a454478acec91"
-  integrity sha512-j8L6dlU1F4dqgxHbzmluFobRcrkFFvv9ZqFonGdwtoNMcoa30/nCCam/yi995oBd7KlHdqxBYalOFNizVSJ9SQ==
+discord-messenger@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/discord-messenger/-/discord-messenger-1.0.5.tgz#fe5ebc9331edd5ab25c1aab326f1d0d72e97ead1"
+  integrity sha512-wHkFoJuBudlQRdludA5fviRMlGowxEIaceXNJMENiIOcYd5ceC/iBv0bKajc6NrvTlTs20lydjn7PbPp1Ineow==
   dependencies:
     discord.js "^12.5.3"
     dotenv "^10.0.0"
