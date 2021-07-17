@@ -1,10 +1,13 @@
-import discordBot from "./discord/discordBot";
 import { liveStreamNotifier } from "./pubSubSubscriber";
 import { MongoClient } from "mongodb";
 import scheduledLivestreamsDAO from "./dao/scheduledLivestreamsDAO";
 import subscriptionsDAO from "./dao/subscriptionDAO";
 import feedsDAO, { Feed } from "./dao/feedsDAO";
 import dotenv from "dotenv";
+
+import { DiscordMessenger } from "discord-messenger";
+
+const discordBot = DiscordMessenger.getMessenger().getBot();
 
 // const url = "https://www.youtube.com/watch?v=J-wP62z90Lk";
 const url = "https://www.youtube.com/watch?v=3_mDtToNWLQ";
@@ -14,7 +17,7 @@ dotenv.config();
 discordBot.on("ready", () => {
   MongoClient.connect(
     process.env.DATABASE_URI ||
-      "Invalid DB URI. Please add DATABASE_URI to .env file",
+    "Invalid DB URI. Please add DATABASE_URI to .env file",
 
     {
       useUnifiedTopology: true,

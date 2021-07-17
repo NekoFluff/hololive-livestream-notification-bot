@@ -1,9 +1,10 @@
 import axios from "axios";
 import cron, { ScheduledTask } from "node-cron";
-import transmitDiscordNotification from "./discord/transmitDiscordNotification";
-import transmitDeveloperNotification from "./discord/transmitDeveloperNotification";
 import scheduledLivestreamsDAO from "./dao/scheduledLivestreamsDAO";
 import moment from "moment-timezone";
+import { DiscordMessenger } from "discord-messenger";
+
+const messenger = DiscordMessenger.getMessenger();
 
 type LiveStreamData = {
   streamTimestamp: number;
@@ -15,7 +16,7 @@ class LiveStreamNotifier {
   scheduledLivestreams: { [key: string]: LiveStreamData } = {};
   urlData: { [key: string]: string } = {};
 
-  constructor() {}
+  constructor() { }
 
   async getScheduleFromMongoDB() {
     // Get data from mongodb
@@ -31,24 +32,24 @@ class LiveStreamNotifier {
       // Not livestreaming
       if (!livestreamData) {
         console.log(`${author} is not livestreaming at ${url}`);
-        transmitDeveloperNotification(
+        messenger.transmitDeveloperNotification(
           `${author} is not livestreaming at ${url}`
         );
         return false;
       } else {
-        transmitDeveloperNotification(`${author} IS livestreaming at ${url}`);
+        messenger.transmitDeveloperNotification(`${author} IS livestreaming at ${url}`);
       }
 
       // Livestream schedule already exists
       if (this.scheduledLivestreams[url]) {
-        transmitDeveloperNotification(
+        messenger.transmitDeveloperNotification(
           "Livestream already exists: " + this.scheduledLivestreams[url]
         );
         if (
           this.scheduledLivestreams[url].streamTimestamp ===
           livestreamData.streamTimestamp
         ) {
-          transmitDeveloperNotification(
+          messenger.transmitDeveloperNotification(
             "Livestream date is exactly the same. Doing nothing..."
           );
 
@@ -56,7 +57,7 @@ class LiveStreamNotifier {
         } else {
           // Unschedule old one. Reschedule with new date
           this.cancelScheduledLivestream(url);
-          transmitDeveloperNotification("Cancelling existing livestream...");
+          messenger.transmitDeveloperNotification("Cancelling existing livestream...");
         }
       }
 
@@ -64,7 +65,7 @@ class LiveStreamNotifier {
       livestreamData.reminderCronJob = this.scheduleLivestream(
         livestreamData.streamTimestamp - 60 * 15,
         () => {
-          transmitDiscordNotification(
+          messenger.transmitDiscordNotification(
             author,
             `[${author}] Livestream starting in 15 minutes! ${url}`
           );
@@ -75,7 +76,7 @@ class LiveStreamNotifier {
       livestreamData.cronJob = this.scheduleLivestream(
         livestreamData.streamTimestamp,
         () => {
-          transmitDiscordNotification(
+          messenger.transmitDiscordNotification(
             author,
             `[${author}] Livestream starting! ${url}`
           );
@@ -101,13 +102,13 @@ class LiveStreamNotifier {
         livestreamData.streamTimestamp
       );
 
-      transmitDeveloperNotification(`Livestream timestamp: [${formattedTime}]`);
+      messenger.transmitDeveloperNotification(`Livestream timestamp: [${formattedTime}]`);
 
       // Successfully scheduled a livestream
       return true;
     } catch (e) {
       const errorMsg = `Error occured while handling url ${url}.\nAuthor: ${author}\nError: ${e}`;
-      transmitDeveloperNotification(errorMsg);
+      messenger.transmitDeveloperNotification(errorMsg);
       console.log(errorMsg);
     }
 
@@ -164,7 +165,7 @@ class LiveStreamNotifier {
     try {
       if (!this.urlData[url]) this.urlData[url] = (await axios.get(url)).data;
     } catch (e) {
-      transmitDeveloperNotification(`Axios error encountered:\n${e}`);
+      messenger.transmitDeveloperNotification(`Axios error encountered:\n${e}`);
     }
     return this.urlData[url];
   }
@@ -185,7 +186,7 @@ class LiveStreamNotifier {
         return livestream;
       }
     } catch (e) {
-      transmitDeveloperNotification(`Cannot determine if livestream:\n${e}`);
+      messenger.transmitDeveloperNotification(`Cannot determine if livestream:\n${e}`);
     }
 
     return null;
@@ -210,9 +211,8 @@ class LiveStreamNotifier {
   convertUnixTimestamp(unixTimestamp: number) {
     const date = new Date(unixTimestamp * 1000);
 
-    const result = `${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${
-      date.getMonth() + 1
-    } *`;
+    const result = `${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${date.getMonth() + 1
+      } *`;
 
     return result;
   }

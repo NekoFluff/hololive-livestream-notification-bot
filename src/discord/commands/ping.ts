@@ -1,4 +1,4 @@
-import { Command } from "./index";
+import { Command } from "discord-messenger";
 
 const PingCommand: Command = {
   name: "ping",

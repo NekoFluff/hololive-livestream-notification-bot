@@ -1,6 +1,8 @@
 import xml2js from "xml2js";
 const parser = new xml2js.Parser();
-import transmitDeveloperNotification from "./transmitDeveloperNotification";
+import { DiscordMessenger } from "discord-messenger";
+
+const messenger = DiscordMessenger.getMessenger();
 
 export type FeedData = {
   author: string;
@@ -29,14 +31,14 @@ async function parseYoutubeXMLIntoFeedData(xml: string | Buffer) {
         updated: entry.updated[0],
       };
 
-      transmitDeveloperNotification(
+      messenger.transmitDeveloperNotification(
         `Feed data parsed.\nAuthor: ${feedData.author}\nTitle: ${feedData.title}\nLink: ${feedData.link}`
       );
 
       return feedData;
     }
   } catch (e) {
-    transmitDeveloperNotification("Parsing Error: " + e.toString());
+    messenger.transmitDeveloperNotification("Parsing Error: " + e.toString());
   }
 
   return null;

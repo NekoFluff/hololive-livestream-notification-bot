@@ -4,6 +4,12 @@ import pubSubSubscriber from "./pubSubSubscriber";
 
 import express, { Request, Response, NextFunction } from "express";
 
+import { DiscordMessenger } from "discord-messenger";
+import commands from "./discord/commands";
+
+var messenger = DiscordMessenger.getMessenger();
+messenger.getBot(commands);
+
 const app = express();
 
 import dotenv from "dotenv";

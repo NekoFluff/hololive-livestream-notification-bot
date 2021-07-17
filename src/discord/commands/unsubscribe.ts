@@ -1,4 +1,4 @@
-import { Command } from "./index";
+import { Command } from "discord-messenger";
 import subscriptionsDAO from "./../../dao/subscriptionDAO";
 
 const UnsubscribeCommand: Command = {

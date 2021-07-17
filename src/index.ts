@@ -1,16 +1,16 @@
 import dotenv from "dotenv";
+import app from "./server";
 import { MongoClient } from "mongodb";
 import scheduledLivestreamsDAO from "./dao/scheduledLivestreamsDAO";
 import subscriptionsDAO from "./dao/subscriptionDAO";
 import feedsDAO, { Feed } from "./dao/feedsDAO";
 import pubSubSubscriber, { liveStreamNotifier } from "./pubSubSubscriber";
-import app from "./server";
 dotenv.config();
 
 const port = process.env.PORT || 3000;
 MongoClient.connect(
   process.env.DATABASE_URI ||
-    "Invalid DB URI. Please add DATABASE_URI to .env file",
+  "Invalid DB URI. Please add DATABASE_URI to .env file",
 
   {
     useUnifiedTopology: true,

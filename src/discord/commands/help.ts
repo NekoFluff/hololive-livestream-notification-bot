@@ -1,5 +1,6 @@
-import commands, { Command } from "./index";
+import commands from "./index";
 import { MessageEmbed } from "discord.js";
+import { Command } from "discord-messenger";
 
 const HelpCommand: Command = {
   name: "help",
