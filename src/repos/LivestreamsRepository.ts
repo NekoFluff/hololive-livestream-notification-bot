@@ -27,7 +27,7 @@ export default class LivestreamsRepository extends Collection<Livestream> {
    */
   async addLivestreams(livestreams: Livestream[]) {
     try {
-      return super.update(livestreams, true)
+      return super.update(livestreams, { upsert: true })
     } catch (error) {
       console.log(error);
     }

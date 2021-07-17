@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@asnou/mongodb-wrapper@^0.1.1":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@asnou/mongodb-wrapper/-/mongodb-wrapper-0.1.2.tgz#e7d591cc8a1d90df494805d03a7662d768532b58"
-  integrity sha512-maCXKhrHsXvxybx5m/RKiviTIvc+Qgyryp+uJ4ITWHTf3scnI40XVpMEJtkm9Wgp5TgyGwZFVy7oyn6EYpuETw==
+"@asnou/mongodb-wrapper@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@asnou/mongodb-wrapper/-/mongodb-wrapper-1.0.0.tgz#33eb8265fed4ea2ee70323aa0ce3bbaf7c88fec4"
+  integrity sha512-pkV6xajkWjyaIEKn82M0g7P1itb078L3q38qCQzfo9wHfzhHtz/ybFThZ0J4MryXM8PFJYzwhQ3To+oqJghMeQ==
   dependencies:
     dotenv "^10.0.0"
     mongodb "^3.6.8"
