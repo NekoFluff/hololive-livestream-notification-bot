@@ -3,6 +3,7 @@ import cron, { ScheduledTask } from "node-cron";
 import LivestreamsRepository, { Livestream } from "./repos/LivestreamsRepository";
 import moment from "moment-timezone";
 import { DiscordMessenger } from "discord-messenger";
+import { getSubscribers } from "./pubSubSubscriber";
 
 const messenger = DiscordMessenger.getMessenger();
 
@@ -67,10 +68,13 @@ class LiveStreamNotifier {
       // Schedule 15 min reminder
       livestreamData.reminderCronJob = this.scheduleLivestream(
         livestreamData.streamTimestamp - 60 * 15,
-        () => {
+        async () => {
           messenger.transmitDiscordNotification(
             author,
-            `[${author}] Livestream starting in 15 minutes! ${url}`
+            `[${author}] Livestream starting in 15 minutes! ${url}`,
+            {
+              users: await getSubscribers(author)
+            }
           );
         }
       );
@@ -78,12 +82,13 @@ class LiveStreamNotifier {
       // Schedule on-time reminder
       livestreamData.liveCronJob = this.scheduleLivestream(
         livestreamData.streamTimestamp,
-        () => {
+        async () => {
           messenger.transmitDiscordNotification(
             author,
             `[${author}] Livestream starting! ${url}`,
             {
-              channel: "hololive-stream-started"
+              channel: "hololive-stream-started",
+              users: await getSubscribers(author)
             }
           );
           delete this.scheduledLivestreams[url];

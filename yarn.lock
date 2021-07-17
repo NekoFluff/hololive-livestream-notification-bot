@@ -720,10 +720,10 @@ discord-api-types@^0.19.0-next.f393ba520d7d6d2aacaca7b3ca5d355fab614f6e:
   resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.19.0-next.f393ba520d7d6d2aacaca7b3ca5d355fab614f6e.tgz#d5f36f5712ec8fe2fe928b5c37618c94a3969d6a"
   integrity sha512-ttRA/8e/WKHDbGFfED5WlS7gID+kalmNr6iMiWBCvkphQ7kFHiTOVbnj/zX9ksaRaYXp/I38SCQ+qZvLu8DJZg==
 
-discord-messenger@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/discord-messenger/-/discord-messenger-1.0.7.tgz#f2c7010213b2e33561564bfdc2586cc573157c2a"
-  integrity sha512-AJXh8JCU8GOrERMPeDcO6ub6eS7bBRrp3nho+cqC3TplNrow4qkzEzNBjOJpIZJV4/pMjIV27GcH0ScmH4elqQ==
+discord-messenger@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/discord-messenger/-/discord-messenger-1.1.0.tgz#e7aacaf86e46798e092ed4b07387f6174a93c80c"
+  integrity sha512-NvJ9ub76SLI9UJq3cpoaoM/H3cjD1cderqnFXK1UGaq9LDBkiFQn2sg6iNoBjsgel1thKCtGPl/bwofAHojLYQ==
   dependencies:
     discord.js "^13.0.0-dev.4d53d0f.1626523373"
     dotenv "^10.0.0"

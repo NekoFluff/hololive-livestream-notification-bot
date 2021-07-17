@@ -56,7 +56,7 @@ export default class SubscriptionsRepository extends Collection<Subscription> {
     ];
 
     try {
-      return await super.aggregate(pipeline);
+      return await (await this.getCollection()).aggregate(pipeline).toArray();
     } catch (e) {
       console.error(`Unable to run aggregation: ${e}`);
       throw e;

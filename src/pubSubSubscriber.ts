@@ -3,7 +3,11 @@ import pubSubHubBub from "pubsubhubbub";
 import parseYoutubeXMLIntoFeedData from "./discord/parseYoutubeXMLIntoFeedData";
 import LiveStreamNotifier from "./liveStreamNotifier";
 import { DiscordMessenger } from "discord-messenger";
+import SubscriptionsRepository from "./repos/SubscriptionsRepository";
+import { User } from "discord.js";
 dotenv.config();
+
+const subscriptionsRepo = new SubscriptionsRepository();
 
 var messenger = DiscordMessenger.getMessenger();
 
@@ -78,7 +82,10 @@ pubSubSubscriber.on("feed", async function (data: any) {
           `[${feedData.author
           }] Livestream on ${liveStreamNotifier.convertUnixTimestampToReadableDate(
             liveStreamData.streamTimestamp
-          )}\n${feedData.link}`
+          )}\n${feedData.link}`,
+          {
+            users: await getSubscribers(feedData.author)
+          }
         );
       else messenger.transmitDeveloperNotification("Not scheduling livestream...");
     } else {
@@ -86,12 +93,32 @@ pubSubSubscriber.on("feed", async function (data: any) {
         `Skipping transmition.\nIsFutureDate: ${isFutureDate}\nLiveStreamData: ${liveStreamData}`
       );
     }
-    // else transmitDiscordNotification(feedData.author, embed);
   } else {
     messenger.transmitDeveloperNotification("Invalid feed data provided");
   }
 
   // console.log(data.headers + " headers");
 });
+
+export async function getSubscribers(author: string) {
+  const names = author.toLocaleLowerCase().split(" ");
+  const subscriptions = await subscriptionsRepo.getSubscriptionsForAuthors(names);
+
+  const users: User[] = []
+
+  for (const sub of subscriptions) {
+    try {
+      console.log(sub)
+      const user = await messenger.getBot().users.fetch(sub['_id'] as any);
+      if (user) {
+        users.push(user);
+      }
+    } catch (error) {
+      console.log(`Unable to get user ${sub.user}`)
+    }
+  }
+
+  return users;
+}
 
 export default pubSubSubscriber;
