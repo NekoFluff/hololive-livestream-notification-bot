@@ -27,7 +27,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "discord-messenger": "^1.0.6",
-    "discord.js": "^12.3.1",
+    "discord.js": "^13.0.0-dev.4d53d0f.1626523373",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^4.1.1",

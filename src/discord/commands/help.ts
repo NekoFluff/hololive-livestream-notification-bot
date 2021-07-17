@@ -34,7 +34,11 @@ const HelpCommand: Command = {
       );
     });
 
-    msg.channel.send(embed);
+    try {
+      await msg.channel.send({ embeds: [embed] });
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
 
