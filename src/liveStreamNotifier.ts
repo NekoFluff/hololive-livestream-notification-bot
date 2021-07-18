@@ -73,6 +73,7 @@ class LiveStreamNotifier {
             author,
             `[${author}] Livestream starting in 15 minutes! ${url}`,
             {
+              cooldownKey: "disabled",
               users: await getSubscribers(author)
             }
           );
@@ -87,6 +88,7 @@ class LiveStreamNotifier {
             author,
             `[${author}] Livestream starting! ${url}`,
             {
+              cooldownKey: "disabled",
               channel: "hololive-stream-started",
               users: await getSubscribers(author)
             }

@@ -9,7 +9,7 @@ const HelpCommand: Command = {
     const embed = new MessageEmbed().setColor("#0099ff").setTitle("Help Page");
     embed.addField(
       "Setup",
-      "Just make a text channel named `#hololive-notifications`. All push notifications from Youtube will be sent here! (e.g. When a video is uploaded/updated)"
+      "Just make text channels named `#hololive-notifications` and `hololive-stream-started`. All push notifications from Youtube will be sent here! (e.g. When a video is uploaded/updated)"
     );
     // .setURL('https://discord.js.org/')
     // .setAuthor('Some name', 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
@@ -28,7 +28,7 @@ const HelpCommand: Command = {
 
     Object.keys(commands).map((key: string) => {
       embed.addField(
-        process.env.PREFIX + commands[key].name,
+        process.env.DM_COMMAND_PREFIX + commands[key].name,
         commands[key].description,
         false
       );

@@ -84,6 +84,7 @@ pubSubSubscriber.on("feed", async function (data: any) {
             liveStreamData.streamTimestamp
           )}\n${feedData.link}`,
           {
+            cooldownKey: "disabled",
             users: await getSubscribers(feedData.author)
           }
         );
