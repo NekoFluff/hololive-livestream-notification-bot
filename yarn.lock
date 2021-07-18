@@ -3,9 +3,9 @@
 
 
 "@asnou/mongodb-wrapper@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@asnou/mongodb-wrapper/-/mongodb-wrapper-2.0.2.tgz#121bfc0a9c0979a3a2ad5a32fc75b4692befdec9"
-  integrity sha512-zrs4A0zaHJZMJSu7tLTpYY4Q3SOusXDhGxraP6eZ+NFOrBz67rVI77px5J43OMMBeCelL63xUk53Tzn0bsY8zA==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@asnou/mongodb-wrapper/-/mongodb-wrapper-2.1.0.tgz#7d1e8d99069fca903ff8eeb37a06888e9c90486a"
+  integrity sha512-bdv0sppDqRYZjYTItNewLHTvri/rZSiSruoOzMjcbpbzuVbCwD/t14eFjD0tMbZp7i93Hleux+VQOCuDD9toBQ==
   dependencies:
     dotenv "^10.0.0"
     mongodb "^4.0.0"
