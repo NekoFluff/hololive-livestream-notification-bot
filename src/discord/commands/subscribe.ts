@@ -12,7 +12,7 @@ const SubscribeCommand: Command = {
     const existingSubs = Object.values(await subscriptionsRepo.getSubscriptions(msg.author.id)).map((sub) => { return sub['subscription'] });
     const duplicates: string[] = [];
     const newAuthors = authors.filter(function (author) {
-      if (existingSubs.indexOf(author) < 0) {
+      if (existingSubs.includes(author)) {
         duplicates.push(author);
         return false; // Don't include
       }

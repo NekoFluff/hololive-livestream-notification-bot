@@ -9,6 +9,7 @@
     "build": "tsc -p .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test-url": "ts-node src/testURL.ts",
+    "test-feature": "ts-node src/testFeature.ts",
     "stats": "ts-node src/botStats.ts"
   },
   "author": "Alexander Nou",
