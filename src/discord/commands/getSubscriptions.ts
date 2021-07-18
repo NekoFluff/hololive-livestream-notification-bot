@@ -8,7 +8,7 @@ const getSubscriptionsCommand: Command = {
   description:
     "Get all your subscriptions registered with `!subscribe`.\n`!getsubs`",
   async execute(msg, args) {
-    msg.reply("Retrieving subscriptions...");
+    // msg.reply("Retrieving subscriptions...");
     try {
       const result = Object.values(await subscriptionRepo.getSubscriptions(msg.author.id));
       if (result.length > 0) {
