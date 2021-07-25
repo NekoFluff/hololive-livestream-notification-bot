@@ -730,13 +730,12 @@ discord-api-types@^0.19.0-next.f393ba520d7d6d2aacaca7b3ca5d355fab614f6e:
   resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.19.0.tgz#86ba8021b29190cf860e90a2bc3e29b1d7aab3ba"
   integrity sha512-t2HKLd43Lbe+rf+ffYfKVv9Kk5f6p7sFqvO6CMV55ZB0PgZv8WigCkt9FoJciYo5S3Q6CGYK+WnE/ZG+6vkBDQ==
 
-discord-messenger@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/discord-messenger/-/discord-messenger-1.1.0.tgz#e7aacaf86e46798e092ed4b07387f6174a93c80c"
-  integrity sha512-NvJ9ub76SLI9UJq3cpoaoM/H3cjD1cderqnFXK1UGaq9LDBkiFQn2sg6iNoBjsgel1thKCtGPl/bwofAHojLYQ==
+discord-messenger@^2.1.0:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/discord-messenger/-/discord-messenger-2.1.1.tgz#dbb666faafeb0da6c07b0b6cb3c6ec0cbf8b35e5"
+  integrity sha512-9QdHexybG3B9WhdR7GxUnrJKzPsE70fIqb1lrPoBIQe8xUgf/nMnt44hK7L+re92Unaz5rryG0mk2eRtfj2IRQ==
   dependencies:
     discord.js "^13.0.0-dev.4d53d0f.1626523373"
-    dotenv "^10.0.0"
     ffmpeg-static "^4.4.0"
 
 discord.js@^13.0.0-dev.4d53d0f.1626523373:

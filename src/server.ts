@@ -1,19 +1,27 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import cors from "cors";
 import morgan from "morgan";
 import pubSubSubscriber from "./pubSubSubscriber";
 
 import express, { Request, Response, NextFunction } from "express";
 
-import { DiscordMessenger } from "discord-messenger";
 import commands from "./discord/commands";
 
-var messenger = DiscordMessenger.getMessenger();
+import { DiscordMessenger } from "discord-messenger";
+var messenger = DiscordMessenger.getMessenger({
+  defaultChannelName: process.env.DM_DEFAULT_CHANNEL_NAME ?? "general",
+  commandPrefix: process.env.DM_COMMAND_PREFIX ?? "!",
+  token: process.env.DM_BOT_TOKEN ?? "",
+  developerMode: process.env.DM_DEVELOPER_MODE === "on",
+});
 messenger.getBot(commands);
+
+
 
 const app = express();
 
-import dotenv from "dotenv";
-dotenv.config();
 import helmet from "helmet";
 import bodyParser from "body-parser";
 
