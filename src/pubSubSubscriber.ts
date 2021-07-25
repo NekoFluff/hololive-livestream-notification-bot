@@ -68,7 +68,6 @@ pubSubSubscriber.on("feed", async function (data: any) {
       // messenger.transmitDeveloperNotification("Handling URL...");
 
       const newLivestreamScheduled = await liveStreamNotifier.handleURL(
-        feedData.author,
         feedData.link
       );
 

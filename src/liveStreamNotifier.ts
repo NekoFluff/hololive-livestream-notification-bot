@@ -8,6 +8,7 @@ import { getSubscribers } from "./pubSubSubscriber";
 const messenger = DiscordMessenger.getMessenger();
 
 type LiveStreamData = {
+  author: string;
   streamTimestamp: number;
   liveCronJob?: ScheduledTask;
   reminderCronJob?: ScheduledTask; // Reminder 15 minutes prior to stream
@@ -26,24 +27,26 @@ class LiveStreamNotifier {
     // Get data from mongodb
     const livestreams = await this.livestreamsRepo.getLivestreams();
     for (const livestream of Object.values(livestreams))
-      this.handleURL(livestream.author, livestream.url);
+      this.handleURL(livestream.url);
   }
 
-  async handleURL(author: string, url: string) {
+  async handleURL(url: string) {
     try {
       const livestreamData = await this.isLivestream(url);
 
       // Not livestreaming
       if (!livestreamData) {
-        console.log(`${author} is not livestreaming at ${url}`);
+        console.log(`${url} is not a livestream`);
         messenger.transmitDeveloperNotification(
-          `${author} is not livestreaming at ${url}`
+          `${url} is not a livestream`
         );
         return false;
       } else {
+        const author = livestreamData.author;
         messenger.transmitDeveloperNotification(`${author} IS livestreaming at ${url}`);
       }
 
+      const author = livestreamData.author;
       // Livestream schedule already exists
       if (this.scheduledLivestreams[url]) {
         const readableDate = this.convertUnixTimestampToReadableDate(this.scheduledLivestreams[url].streamTimestamp);
@@ -125,7 +128,7 @@ class LiveStreamNotifier {
       // Successfully scheduled a livestream
       return true;
     } catch (e) {
-      const errorMsg = `Error occured while handling url ${url}.\nAuthor: ${author}\nError: ${e}`;
+      const errorMsg = `Error occured while handling url ${url}.\nError: ${e}`;
       messenger.transmitDeveloperNotification(errorMsg);
       console.log(errorMsg);
     }
@@ -196,9 +199,11 @@ class LiveStreamNotifier {
     try {
       const data = await this.getURLData(url);
       const timestamp = this.getStreamTimestamp(data);
+      const author = this.getAuthor(data);
 
-      if (timestamp) {
+      if (timestamp && author) {
         const livestream: LiveStreamData = {
+          author: author,
           streamTimestamp: timestamp,
         };
         return livestream;
@@ -215,6 +220,14 @@ class LiveStreamNotifier {
 
     const res = text.match(re);
     if (res && res.length > 0) return parseInt(res[0]);
+    return null;
+  }
+
+  getAuthor(text: string) {
+    let re = new RegExp(/(?<="author":").*?(?=")/); // constructor with regular expression literal as first argument (Starting with ECMAScript 6)
+
+    const res = text.match(re);
+    if (res && res.length > 0) return res[0];
     return null;
   }
 
