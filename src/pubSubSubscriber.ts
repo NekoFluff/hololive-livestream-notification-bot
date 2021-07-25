@@ -78,7 +78,7 @@ pubSubSubscriber.on("feed", async function (data: any) {
         messenger.transmitDiscordNotification(
           feedData.author,
           `[${feedData.author
-          }] Livestream on ${readableDate}}\n${feedData.link}`,
+          }] Livestream on ${readableDate}\n${feedData.link}`,
           {
             cooldownKey: "disabled",
             users: await getSubscribers(feedData.author)
