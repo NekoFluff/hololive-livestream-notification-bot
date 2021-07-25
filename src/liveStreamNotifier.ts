@@ -46,22 +46,24 @@ class LiveStreamNotifier {
 
       // Livestream schedule already exists
       if (this.scheduledLivestreams[url]) {
+        const readableDate = this.convertUnixTimestampToReadableDate(this.scheduledLivestreams[url].streamTimestamp);
+
         messenger.transmitDeveloperNotification(
-          "Livestream already exists: " + this.scheduledLivestreams[url]
+          `Livestream already exists at UNIX time ${this.scheduledLivestreams[url].streamTimestamp} [${readableDate}]`
         );
         if (
           this.scheduledLivestreams[url].streamTimestamp ===
           livestreamData.streamTimestamp
         ) {
           messenger.transmitDeveloperNotification(
-            "Livestream date is exactly the same. Doing nothing..."
+            `Livestream date (${livestreamData.streamTimestamp}) didn't change. Doing nothing.`
           );
 
           return false;
         } else {
           // Unschedule old one. Reschedule with new date
           this.cancelScheduledLivestream(url);
-          messenger.transmitDeveloperNotification("Cancelling existing livestream...");
+          messenger.transmitDeveloperNotification("Canceling existing livestream.");
         }
       }
 
@@ -118,7 +120,7 @@ class LiveStreamNotifier {
         livestreamData.streamTimestamp
       );
 
-      messenger.transmitDeveloperNotification(`Livestream timestamp: [${formattedTime}]`);
+      messenger.transmitDeveloperNotification(`Success! Livestream timestamp: [${formattedTime}]`);
 
       // Successfully scheduled a livestream
       return true;
