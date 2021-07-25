@@ -1,7 +1,7 @@
 {
-  "name": "hololive-en-notification-bot",
+  "name": "hololive-livestream-notification-bot",
   "version": "1.0.0",
-  "description": "Discord bot for youtube notifications",
+  "description": "Discord bot for youtube notifications from Hololive members",
   "main": "./build/index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
