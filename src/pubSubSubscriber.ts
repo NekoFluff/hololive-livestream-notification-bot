@@ -90,7 +90,7 @@ pubSubSubscriber.on("feed", async function (data: any) {
 
     } else {
       messenger.transmitDeveloperNotification(
-        `Skipping transmition.\nIsFutureDate: ${isFutureDate}\nLiveStreamData: ${liveStreamData}`
+        `Skipping transmission.`
       );
     }
   } else {
