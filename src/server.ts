@@ -4,11 +4,12 @@ dotenv.config();
 import cors from "cors";
 import morgan from "morgan";
 import pubSubSubscriber from "./pubSubSubscriber";
-
 import express, { Request, Response, NextFunction } from "express";
 
-import commands from "./discord/commands";
+import { MongoConnector } from "@asnou/mongodb-wrapper";
+MongoConnector.setDefaultConnectionURL(process.env.MONGO_CONNECTION_URL ?? "unset-mongo-connection-url-env-variable");
 
+import commands from "./discord/commands";
 import { DiscordMessenger } from "discord-messenger";
 var messenger = DiscordMessenger.getMessenger({
   defaultChannelName: process.env.DM_DEFAULT_CHANNEL_NAME ?? "general",
@@ -17,8 +18,6 @@ var messenger = DiscordMessenger.getMessenger({
   developerMode: process.env.DM_DEVELOPER_MODE === "on",
 });
 messenger.getBot(commands);
-
-
 
 const app = express();
 
