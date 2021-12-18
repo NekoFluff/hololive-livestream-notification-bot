@@ -38,8 +38,8 @@ pubSubSubscriber.on("unsubscribe", function (data: any) {
 
 pubSubSubscriber.on("feed", async function (data: any) {
   console.log("-------------------FEED-------------------");
-  // messenger.transmitDeveloperNotification("Feed incoming!");
-  // messenger.transmitDeveloperNotification(data.feed.toString());
+  messenger.transmitDeveloperNotification("Feed incoming!");
+  messenger.transmitDeveloperNotification(data.feed.toString());
 
   console.log(data.topic + " feed");
   // console.log(data.hub + " hub");
@@ -65,13 +65,13 @@ pubSubSubscriber.on("feed", async function (data: any) {
     messenger.transmitDeveloperNotification(`Livestream timestamp ${liveStreamData?.streamTimestamp} (${readableDate}) is in the future: ${isFutureDate}`);
 
     if (liveStreamData && isFutureDate) {
-      // messenger.transmitDeveloperNotification("Handling URL...");
+      messenger.transmitDeveloperNotification("Handling URL...");
 
       const newLivestreamScheduled = await liveStreamNotifier.handleURL(
         feedData.link
       );
 
-      // messenger.transmitDeveloperNotification("Successfully handled URL...");
+      messenger.transmitDeveloperNotification("Successfully handled URL...");
 
       if (newLivestreamScheduled) {
         console.log(`Readable date ${readableDate}`)
