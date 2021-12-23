@@ -1,3 +1,4 @@
+# [Deprecated] The bot was recreated in golang and is maintained under https://github.com/NekoFluff/gobot
 # Hololive Livestream Notification Bot
 
 Sends notifications when livestreams from hololive are about to begin. (15 minutes prior and on time)
